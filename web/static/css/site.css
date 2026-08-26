@@ -224,8 +224,9 @@ main:focus { outline: none; } /* skip-link target */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-5);
+  gap: var(--space-3);
   min-height: 64px;
+  flex-wrap: nowrap;
 }
 
 .brand {
@@ -236,6 +237,8 @@ main:focus { outline: none; } /* skip-link target */
   color: var(--fg);
   text-decoration: none;
   letter-spacing: -0.02em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .brand img {
@@ -243,10 +246,17 @@ main:focus { outline: none; } /* skip-link target */
   height: 32px;
 }
 
+.brand span {
+  white-space: nowrap;
+}
+
 .site-nav {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-1);
+  flex-wrap: nowrap;
+  flex: 1;
+  justify-content: flex-end;
 }
 
 .site-nav a {
@@ -256,6 +266,8 @@ main:focus { outline: none; } /* skip-link target */
   color: var(--fg);
   font-weight: 500;
   transition: all var(--transition);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .site-nav a:hover {
@@ -318,20 +330,25 @@ main:focus { outline: none; } /* skip-link target */
 /* Language switcher */
 .lang-switch {
   display: inline-flex;
-  gap: 2px;
-  padding: 2px;
+  align-items: center;
+  gap: 0;
+  padding: 3px;
   background: var(--bg-alt);
-  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  border-radius: 999px;
   font-size: 0.75rem;
   font-weight: 600;
+  flex-shrink: 0;
+  margin-left: var(--space-2);
 }
 
 .lang-switch a {
-  padding: 2px 8px;
-  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  border-radius: 999px;
   color: var(--fg-muted);
   text-decoration: none;
   transition: all var(--transition);
+  white-space: nowrap;
 }
 
 .lang-switch a:hover {
@@ -339,19 +356,18 @@ main:focus { outline: none; } /* skip-link target */
 }
 
 .lang-switch a.active {
-  background: var(--bg-elev);
+  background: var(--bg);
   color: var(--fg);
   box-shadow: var(--shadow-sm);
 }
 
 @media (max-width: 720px) {
   .lang-switch {
-    align-self: stretch;
-    justify-content: center;
+    margin-left: 0;
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 1200px) {
   .search-mini {
     display: none;
   }
@@ -390,11 +406,26 @@ main:focus { outline: none; } /* skip-link target */
   padding: 0;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .mobile-menu-btn svg { width: 20px; height: 20px; }
 
-@media (max-width: 720px) {
+/* Responsive: collapse nav to hamburger at narrower breakpoint
+   so Thai nav (longer labels) doesn't break the row. */
+@media (max-width: 1200px) {
+  /* Reduce nav padding so longer Thai labels fit on one line */
+  .site-nav a {
+    padding: var(--space-2);
+    font-size: 0.875rem;
+  }
+  /* Hide search-mini inline, keep it in mobile menu */
+  .site-nav .search-mini {
+    display: none;
+  }
+}
+
+@media (max-width: 1000px) {
   .mobile-menu-btn { display: inline-flex; }
   .site-nav {
     position: absolute;
@@ -411,14 +442,24 @@ main:focus { outline: none; } /* skip-link target */
     opacity: 0;
     pointer-events: none;
     transition: all var(--transition);
+    justify-content: flex-start;
   }
   .site-nav.is-open {
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
   }
-  .site-nav a { padding: var(--space-3); }
+  .site-nav a { padding: var(--space-3); font-size: 1rem; }
   .site-nav a.btn { margin-top: var(--space-2); }
+  /* Show search inside the mobile menu */
+  .site-nav .search-mini {
+    display: flex;
+    width: 100%;
+  }
+  .site-nav .search-mini input {
+    width: 100%;
+    height: 44px;
+  }
 }
 
 /* ============================================
@@ -441,6 +482,9 @@ main:focus { outline: none; } /* skip-link target */
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  word-break: keep-all;       /* keep words together when possible */
+  overflow-wrap: anywhere;     /* break only at character boundaries if needed */
+  line-height: 1.15;
 }
 
 .hero .lede {
@@ -448,6 +492,8 @@ main:focus { outline: none; } /* skip-link target */
   color: var(--fg-muted);
   max-width: 720px;
   margin-inline: auto;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 .hero-actions {
@@ -494,11 +540,14 @@ main:focus { outline: none; } /* skip-link target */
   background: var(--bg-elev);
   color: var(--fg);
   border-color: var(--border);
+  font-weight: 600;
 }
 
 .btn-secondary:hover {
   background: var(--bg-alt);
   border-color: var(--accent);
+  color: var(--fg);
+  transform: translateY(-1px);
 }
 
 /* ============================================
@@ -924,6 +973,7 @@ textarea {
    ============================================ */
 .newsletter {
   background: var(--bg-alt);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: var(--space-8);
   text-align: center;
@@ -937,20 +987,25 @@ textarea {
 .newsletter p {
   color: var(--fg-muted);
   margin-bottom: var(--space-5);
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .newsletter-form {
   display: flex;
   gap: var(--space-2);
-  max-width: 420px;
+  max-width: 480px;
   margin: 0 auto;
 }
 
 .newsletter-form input {
   flex: 1;
+  min-width: 0;  /* allow shrinking */
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
+  .newsletter { padding: var(--space-5); }
   .newsletter-form { flex-direction: column; }
 }
 
@@ -1029,4 +1084,28 @@ textarea {
   .site-header, .site-footer, .skip-link, .theme-toggle, .mobile-menu-btn { display: none; }
   body { background: white; color: black; }
   a { color: black; text-decoration: underline; }
+}
+
+/* ============================================
+   Language-specific typography tuning
+   ============================================ */
+
+/* Thai — slightly tighter line-height, no kerning issues */
+html[lang="th"],
+html[lang="th"] body {
+  /* Thai script sits a touch higher than Latin at the same size;
+     a slightly tighter line-height and a hair more letter-spacing
+     improves readability for paragraph text. */
+  line-height: 1.65;
+}
+
+html[lang="th"] .hero h1 {
+  /* Long Thai headings wrap awkwardly with default line-height; give
+     a hair more room so wrapped lines breathe. */
+  line-height: 1.25;
+}
+
+/* Latin — default spacing already good. */
+html[lang="en"] body {
+  line-height: 1.6;
 }
