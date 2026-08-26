@@ -1,0 +1,109 @@
+# UI strings for English (default)
+# Keys are referenced from templates via the `t` function.
+
+nav:
+  services: Services
+  portfolio: Portfolio
+  blog: Blog
+  about: About
+  faq: FAQ
+  contact: Contact
+  search_placeholder: Search…
+
+hero:
+  title: Engineering systems that scale, reliably.
+  lede: "nuteo solution designs, builds, and operates backend systems and platforms for teams that need real production outcomes — not slides."
+  cta_primary: Start a conversation
+  cta_secondary: See our work
+
+home:
+  section_what_title: What we do
+  section_what_lede: "End-to-end engineering and operations — from a single component to a full platform."
+  section_work_title: Selected work
+  section_work_lede: "Concrete outcomes, not case studies padded with adjectives."
+  section_testimonials_title: What clients say
+  view_all_services: All services →
+  view_all_projects: All projects →
+
+contact:
+  title: Contact
+  lede: "Tell us about your project. We reply within 1 business day."
+  name: Name
+  email: Email
+  company: Company
+  topic: Topic
+  topic_choose: "— choose —"
+  topic_cloud: Cloud migration
+  topic_devops: DevOps & SRE
+  topic_backend: Backend / API
+  topic_security: Security & compliance
+  topic_exploring: Just exploring
+  message: Message
+  consent: "I agree to nuteo solution storing this message and replying via email. See our privacy notice."
+  submit: Send message
+  thanks: "Thanks — we got it."
+  thanks_body: "Your message is on its way. We'll reply within 1 business day."
+  or_email: "Or email directly:"
+
+blog:
+  title: Blog
+  lede: "Engineering articles, post-mortems, and notes from the team."
+  no_posts: No posts yet. Check back soon.
+  published: Published
+  by: By
+  back: "← All posts"
+
+portfolio:
+  title: Portfolio
+  lede: "Selected projects across cloud migration, observability, and platform engineering."
+  industry_year: "%s · %s"
+  client: Client
+
+services:
+  title: Services
+  lede: "End-to-end engineering and operations — from a single component to a full platform."
+  talk_to_us: Talk to us
+
+faq:
+  title: Frequently asked questions
+  lede: "Common questions about working with nuteo solution. Don't see yours?"
+  ask_directly: Ask us directly
+
+search:
+  title: Search
+  lede: "Search across services, portfolio, and blog posts."
+  placeholder: kubernetes, postmortem, finops...
+
+cta:
+  learn_more: Learn more →
+
+footer:
+  tagline: "Software engineering & IT consulting from Bangkok."
+  newsletter_title: Engineering insights, monthly
+  newsletter_lede: "One short email per month: post-mortems, infra patterns, and tools we like. Unsubscribe in one click."
+  newsletter_placeholder: you@company.com
+  newsletter_submit: Subscribe
+  newsletter_success: "Thanks! Confirmation sent to your inbox."
+  newsletter_already: "You're already on the list."
+  newsletter_invalid: "That doesn't look like a valid email."
+  newsletter_required: "Please enter an email address."
+  sitemap: Sitemap
+  rss: RSS feed
+  copyright: "All rights reserved."
+
+errors:
+  404_title: "404 — page not found"
+  404_body: "The page you're looking for doesn't exist (or moved)."
+  back_home: Back to home
+  server_error: "Something went wrong on our end. Please try again."
+  validation_required: "Please fill in name, email, and message."
+  validation_consent: "Please confirm you've read the privacy notice."
+
+buttons:
+  back: "← Back"
+  view: "View →"
+
+common:
+  read_more: Read more →
+  by: "by"
+  all: All

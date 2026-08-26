@@ -1,0 +1,27 @@
+{{template "header" .}}
+<section class="container section">
+  <h1>Blog</h1>
+  <p class="lede">Engineering articles, post-mortems, and notes from the team.</p>
+
+  {{if .Posts}}
+  <div class="grid grid-2" style="margin-top: var(--space-8);">
+    {{range .Posts}}
+    <a href="/blog/{{.Slug}}" class="card" data-animate>
+      <p class="meta">{{.PublishedAt.Format "January 2, 2006"}}{{if .Author}} · {{.Author}}{{end}}</p>
+      <h3>{{.Title}}</h3>
+      <p>{{.Summary}}</p>
+      {{if .Tags}}
+      <div class="tags" style="margin-top: var(--space-3);">
+        {{range .Tags}}<a href="/blog/tag/{{.}}" class="tag">{{.}}</a>{{end}}
+      </div>
+      {{end}}
+    </a>
+    {{end}}
+  </div>
+  {{else}}
+  <div style="text-align: center; padding: var(--space-12) 0; color: var(--fg-muted);">
+    <p>No posts yet. Check back soon.</p>
+  </div>
+  {{end}}
+</section>
+{{template "footer" .}}

@@ -1,0 +1,21 @@
+{{template "header" .}}
+<section class="container section">
+  <h1>Portfolio</h1>
+  <p class="lede">Selected projects across cloud migration, observability, and platform engineering.</p>
+
+  <div class="grid grid-2">
+    {{range .Projects}}
+    <a href="/portfolio/{{.Slug}}" class="card" data-animate>
+      <p class="meta">{{.Industry}} · {{.Year}}</p>
+      <h3>{{.Title}}</h3>
+      <p>{{.Summary}}</p>
+      {{if .Stack}}
+      <div class="tags" style="margin-top: var(--space-3);">
+        {{range .Stack}}<span class="tag">{{.}}</span>{{end}}
+      </div>
+      {{end}}
+    </a>
+    {{end}}
+  </div>
+</section>
+{{template "footer" .}}

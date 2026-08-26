@@ -1,0 +1,73 @@
+{{template "header" .}}
+<section class="container section narrow">
+  <h1>Contact</h1>
+  <p class="lede">Tell us about your project. We reply within 1 business day.</p>
+
+  {{if .Error}}
+  <div class="alert error" role="alert">
+    {{.Error}}
+  </div>
+  {{end}}
+
+  <form class="contact-form" method="POST" action="/contact" novalidate
+        accept-charset="utf-8">
+    <input type="hidden" name="_csrf" value="{{.CSRFToken}}">
+
+    <div class="form-row">
+      <div>
+        <label for="name">Name <span class="required">*</span></label>
+        <input id="name" type="text" name="name" required minlength="2" maxlength="100"
+               value="{{.Name}}" autocomplete="name">
+      </div>
+      <div>
+        <label for="email">Email <span class="required">*</span></label>
+        <input id="email" type="email" name="email" required
+               value="{{.Email}}" autocomplete="email">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div>
+        <label for="company">Company</label>
+        <input id="company" type="text" name="company" maxlength="200"
+               value="{{.Company}}" autocomplete="organization">
+      </div>
+      <div>
+        <label for="topic">Topic <span class="required">*</span></label>
+        <select id="topic" name="topic" required>
+          <option value="">— choose —</option>
+          <option value="cloud-migration"{{if eq .Topic "cloud-migration"}} selected{{end}}>Cloud migration</option>
+          <option value="devops"{{if eq .Topic "devops"}} selected{{end}}>DevOps &amp; SRE</option>
+          <option value="backend"{{if eq .Topic "backend"}} selected{{end}}>Backend / API</option>
+          <option value="security"{{if eq .Topic "security"}} selected{{end}}>Security &amp; compliance</option>
+          <option value="intro"{{if eq .Topic "intro"}} selected{{end}}>Just exploring</option>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <label for="message">Message <span class="required">*</span></label>
+      <textarea id="message" name="message" required minlength="10" maxlength="5000">{{.Message}}</textarea>
+    </div>
+
+    {{/* Honeypot — hidden from humans; bots fill it */}}
+    <div class="honeypot" aria-hidden="true">
+      <label for="website">Website (leave blank)</label>
+      <input id="website" type="text" name="website" tabindex="-1" autocomplete="off">
+    </div>
+
+    <label class="checkbox">
+      <input type="checkbox" name="consent" required{{if .Consent}} checked{{end}}>
+      <span>I agree to nuteo solution storing this message and replying via email. See our privacy notice.</span>
+    </label>
+
+    <div>
+      <button type="submit" class="btn btn-primary">Send message</button>
+    </div>
+  </form>
+
+  <p style="margin-top: var(--space-6); color: var(--fg-muted); font-size: 0.875rem;">
+    Or email directly: <a href="mailto:{{.ContactEmail}}">{{.ContactEmail}}</a>
+  </p>
+</section>
+{{template "footer" .}}

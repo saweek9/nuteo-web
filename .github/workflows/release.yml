@@ -1,0 +1,63 @@
+# Release workflow — creates GitHub releases when you push a tag like v1.0.0
+#
+# Usage:
+#   git tag v1.0.0
+#   git push origin v1.0.0
+#   → Actions builds binaries for multiple platforms + creates release
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write   # needed to create the release
+
+jobs:
+  release:
+    name: Build + publish release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+
+      - name: Run tests
+        run: go test ./...
+
+      - name: Build (linux/amd64)
+        run: |
+          mkdir -p dist
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o dist/nuteo-web-linux-amd64 ./cmd/server
+          chmod +x dist/nuteo-web-linux-amd64
+
+      - name: Build (darwin/arm64 — Apple Silicon)
+        run: |
+          CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -ldflags="-s -w" -o dist/nuteo-web-darwin-arm64 ./cmd/server
+          chmod +x dist/nuteo-web-darwin-arm64
+
+      - name: Build (windows/amd64)
+        run: |
+          CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o dist/nuteo-web-windows-amd64.exe ./cmd/server
+
+      - name: Generate checksums
+        run: |
+          cd dist
+          sha256sum * > SHA256SUMS.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/nuteo-web-linux-amd64
+            dist/nuteo-web-darwin-arm64
+            dist/nuteo-web-windows-amd64.exe
+            dist/SHA256SUMS.txt
+          generate_release_notes: true
+          draft: false
+          prerelease: false

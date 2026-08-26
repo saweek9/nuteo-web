@@ -1,0 +1,17 @@
+# Replace with your real domain
+nuteo.example.com {
+    encode zstd gzip
+    reverse_proxy app:8080
+
+    # Security headers (in addition to those set by the app)
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+}
+
+# Optional: redirect www to apex
+www.nuteo.example.com {
+    redir https://nuteo.example.com{uri} permanent
+}

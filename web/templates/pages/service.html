@@ -1,0 +1,23 @@
+{{template "header" .}}
+<article class="container section detail">
+  <a href="/services" class="back">← All services</a>
+  <h1>{{.Service.Title}}</h1>
+  <p class="lede">{{.Service.Summary}}</p>
+
+  {{if .Service.Tags}}
+  <div class="tags" style="margin-top: var(--space-4);">
+    {{range .Service.Tags}}<span class="tag tag-accent">{{.}}</span>{{end}}
+  </div>
+  {{end}}
+
+  <div class="body">
+    {{safeHTML .Service.BodyHTML}}
+  </div>
+
+  {{if .Service.CTAHref}}
+  <p style="margin-top: var(--space-8);">
+    <a href="{{.Service.CTAHref}}" class="btn btn-primary">{{default "Talk to us" .Service.CTALabel}} →</a>
+  </p>
+  {{end}}
+</article>
+{{template "footer" .}}

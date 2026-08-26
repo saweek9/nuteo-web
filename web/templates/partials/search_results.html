@@ -1,0 +1,59 @@
+{{define "search_results"}}<div id="search-results">
+  {{if .Query}}
+    {{if .Results}}
+    <p style="color: var(--fg-muted); margin-bottom: var(--space-3); font-size: 0.875rem;">
+      {{.Count}} {{if eq (printf "%d" .Count) "1"}}result{{else}}results{{end}} for "<strong>{{.Query}}</strong>"
+    </p>
+    <ul class="search-results-list">
+      {{range .Results}}
+      <li class="search-result" data-type="{{.Type}}">
+        <a href="{{.URL}}">
+          <span class="type-badge type-{{.Type}}">{{.Type}}</span>
+          <span class="title">{{.Title}}</span>
+          <span class="snippet">{{.Snippet}}</span>
+        </a>
+      </li>
+      {{end}}
+    </ul>
+    {{else}}
+    <p style="color: var(--fg-muted); padding: var(--space-4); text-align: center;">
+      No matches for "<strong>{{.Query}}</strong>". Try different keywords.
+    </p>
+    {{end}}
+  {{else}}
+    <p style="color: var(--fg-muted); padding: var(--space-4); text-align: center;">
+      Type to search across services, portfolio, and blog posts.
+    </p>
+  {{end}}
+</div>
+<style>
+  .search-results-list { list-style: none; padding: 0; margin: 0; }
+  .search-result { border-bottom: 1px solid var(--border); }
+  .search-result:last-child { border-bottom: none; }
+  .search-result a {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3) 0;
+    color: var(--fg);
+    text-decoration: none;
+  }
+  .search-result a:hover .title { color: var(--accent); }
+  .search-result .title { font-weight: 600; font-size: 1rem; }
+  .search-result .snippet { color: var(--fg-muted); font-size: 0.875rem; }
+  .type-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: var(--radius-sm);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    width: fit-content;
+    margin-bottom: 2px;
+  }
+  .type-service { background: var(--accent-soft); color: var(--accent); }
+  .type-project { background: var(--success-soft); color: var(--success); }
+  .type-post    { background: var(--warning-soft); color: var(--warning); }
+  .type-page    { background: var(--bg-alt); color: var(--fg-muted); }
+</style>
+{{end}}

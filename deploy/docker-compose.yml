@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  # Caddy: reverse proxy + auto-TLS via Let's Encrypt.
+  # Listens on 80/443, forwards to app on 8080.
+  caddy:
+    image: caddy:2.8-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+    networks: [nuteonet]
+
+  # Go application
+  app:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    restart: unless-stopped
+    env_file: ../.env
+    expose:
+      - "8080"
+    volumes:
+      # Mount content read-only so updates don't require image rebuild
+      - ../content:/app/content:ro
+    networks: [nuteonet]
+
+  # Optional: local SMTP catch-all for testing contact forms.
+  # Uncomment + browse to http://your-host:8025 to see captured emails.
+  # mailhog:
+  #   image: mailhog/mailhog:latest
+  #   restart: unless-stopped
+  #   ports:
+  #     - "1025:1025"   # SMTP
+  #     - "8025:8025"   # Web UI
+  #   networks: [nuteonet]
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  nuteonet:
+    driver: bridge

@@ -1,0 +1,80 @@
+{{template "header" .}}
+<section class="container section">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <h1>Admin</h1>
+    <form method="POST" action="/admin/logout">
+      <button type="submit" class="btn btn-secondary">Sign out ({{.AdminUser}})</button>
+    </form>
+  </div>
+
+  <div class="grid grid-3" style="margin-top: var(--space-6);">
+    <div class="card">
+      <h3>Services</h3>
+      <p style="font-size: 2rem; font-weight: 700; margin: var(--space-2) 0;">{{.ServiceCount}}</p>
+      <a href="/services" class="arrow">View →</a>
+    </div>
+    <div class="card">
+      <h3>Portfolio</h3>
+      <p style="font-size: 2rem; font-weight: 700; margin: var(--space-2) 0;">{{.PortfolioCount}}</p>
+      <a href="/portfolio" class="arrow">View →</a>
+    </div>
+    <div class="card">
+      <h3>Blog posts</h3>
+      <p style="font-size: 2rem; font-weight: 700; margin: var(--space-2) 0;">{{.PostCount}}</p>
+      <a href="/blog" class="arrow">View →</a>
+    </div>
+    <div class="card">
+      <h3>Newsletter subs</h3>
+      <p style="font-size: 2rem; font-weight: 700; margin: var(--space-2) 0;">{{.SubscriberCount}}</p>
+      <span class="arrow">Total</span>
+    </div>
+  </div>
+
+  <h2 style="margin-top: var(--space-10);">Recent content</h2>
+  <div style="background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;">
+    <table style="width: 100%; border-collapse: collapse;">
+      <thead style="background: var(--bg-alt);">
+        <tr>
+          <th style="text-align: left; padding: var(--space-3); font-size: 0.875rem;">Type</th>
+          <th style="text-align: left; padding: var(--space-3); font-size: 0.875rem;">Title</th>
+          <th style="text-align: left; padding: var(--space-3); font-size: 0.875rem;">Updated</th>
+          <th style="text-align: right; padding: var(--space-3); font-size: 0.875rem;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .Recent}}
+        <tr style="border-top: 1px solid var(--border);">
+          <td style="padding: var(--space-3);"><span class="tag tag-accent">{{.Type}}</span></td>
+          <td style="padding: var(--space-3);">{{.Title}}</td>
+          <td style="padding: var(--space-3); color: var(--fg-muted); font-size: 0.875rem;">{{.UpdatedAt.Format "Jan 2, 2006"}}</td>
+          <td style="padding: var(--space-3); text-align: right;">
+            <a href="{{.URL}}" target="_blank" rel="noopener">View →</a>
+          </td>
+        </tr>
+        {{else}}
+        <tr><td colspan="4" style="padding: var(--space-6); text-align: center; color: var(--fg-muted);">No content yet.</td></tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+
+  <h2 style="margin-top: var(--space-10);">Manage content</h2>
+  <p style="color: var(--fg-muted); margin-bottom: var(--space-4);">
+    Edit markdown files in <code>/home/admin_nuteo/nuteo-web/content/</code> on the server, then restart the service.
+  </p>
+  <div class="grid grid-3">
+    <a href="/services" class="card">
+      <h3>Edit services</h3>
+      <p>Add or update offerings. Files: <code>content/services/*.md</code></p>
+    </a>
+    <a href="/portfolio" class="card">
+      <h3>Edit portfolio</h3>
+      <p>Showcase your work. Files: <code>content/portfolio/*.md</code></p>
+    </a>
+    <a href="/blog" class="card">
+      <h3>Edit blog posts</h3>
+      <p>Share knowledge. Files: <code>content/posts/*.md</code></p>
+    </a>
+  </div>
+</section>
+{{template "footer" .}}

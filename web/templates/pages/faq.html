@@ -1,0 +1,21 @@
+{{template "header" .}}
+<section class="container section narrow">
+  <h1>Frequently asked questions</h1>
+  <p class="lede">Common questions about working with nuteo solution. Don't see yours? <a href="/contact">Drop us a line</a>.</p>
+
+  <div class="faq-list">
+    {{range .FAQs}}
+    <details class="faq-item">
+      <summary>{{.Question}}</summary>
+      <div class="answer">
+        <p>{{safeHTML .Answer}}</p>
+      </div>
+    </details>
+    {{end}}
+  </div>
+
+  <p style="margin-top: var(--space-8); text-align: center;">
+    Still have questions? <a href="/contact" class="btn btn-primary">Ask us directly →</a>
+  </p>
+</section>
+{{template "footer" .}}

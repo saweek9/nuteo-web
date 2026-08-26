@@ -1,0 +1,109 @@
+# Thai translations. Used when ?lang=th or Accept-Language: th.*
+
+nav:
+  services: บริการ
+  portfolio: ผลงาน
+  blog: บทความ
+  about: เกี่ยวกับเรา
+  faq: คำถามที่พบบ่อย
+  contact: ติดต่อ
+  search_placeholder: ค้นหา…
+
+hero:
+  title: วิศวกรรมระบบที่ขยายได้ อย่างมั่นคง
+  lede: "nuteo solution ออกแบบ พัฒนา และดูแลระบบ backend และแพลตฟอร์มสำหรับทีมที่ต้องการผลลัพธ์ที่ใช้งานได้จริง — ไม่ใช่แค่สไลด์"
+  cta_primary: เริ่มพูดคุย
+  cta_secondary: ดูผลงานของเรา
+
+home:
+  section_what_title: เราทำอะไร
+  section_what_lede: "วิศวกรรมและการดำเนินงานแบบ end-to-end — ตั้งแต่องค์ประกอบเดียวไปจนถึงแพลตฟอร์มเต็มรูปแบบ"
+  section_work_title: ผลงานที่คัดสรร
+  section_work_lede: "ผลลัพธ์ที่จับต้องได้ ไม่ใช่ case study ที่อัดคำศัพท์"
+  section_testimonials_title: ลูกค้าพูดถึงเรา
+  view_all_services: ดูบริการทั้งหมด →
+  view_all_projects: ดูผลงานทั้งหมด →
+
+contact:
+  title: ติดต่อเรา
+  lede: "บอกเราเกี่ยวกับโปรเจกต์ของคุณ เราตอบกลับภายใน 1 วันทำการ"
+  name: ชื่อ
+  email: อีเมล
+  company: บริษัท
+  topic: หัวข้อ
+  topic_choose: "— เลือก —"
+  topic_cloud: Cloud migration
+  topic_devops: DevOps & SRE
+  topic_backend: Backend / API
+  topic_security: Security & compliance
+  topic_exploring: แค่สำรวจดู
+  message: ข้อความ
+  consent: "ฉันยินยอมให้ nuteo solution เก็บข้อความนี้และตอบกลับทางอีเมล ดูนโยบายความเป็นส่วนตัว"
+  submit: ส่งข้อความ
+  thanks: "ขอบคุณ — ได้รับแล้ว"
+  thanks_body: "ข้อความของคุณกำลังจัดส่ง เราจะตอบกลับภายใน 1 วันทำการ"
+  or_email: "หรือส่งอีเมลโดยตรง:"
+
+blog:
+  title: บทความ
+  lede: "บทความทางวิศวกรรม, post-mortem, และบันทึกจากทีม"
+  no_posts: ยังไม่มีบทความ กลับมาดูใหม่ภายหลัง
+  published: เผยแพร่
+  by: โดย
+  back: "← บทความทั้งหมด"
+
+portfolio:
+  title: ผลงาน
+  lede: "โปรเจกต์ที่คัดสรรในด้าน cloud migration, observability, และ platform engineering"
+  industry_year: "%s · %s"
+  client: ลูกค้า
+
+services:
+  title: บริการ
+  lede: "วิศวกรรมและการดำเนินงานแบบ end-to-end — ตั้งแต่องค์ประกอบเดียวไปจนถึงแพลตฟอร์มเต็มรูปแบบ"
+  talk_to_us: พูดคุยกับเรา
+
+faq:
+  title: คำถามที่พบบ่อย
+  lede: "คำถามทั่วไปเกี่ยวกับการทำงานกับ nuteo solution ไม่เจอคำตอบที่ต้องการ?"
+  ask_directly: ถามเราโดยตรง
+
+search:
+  title: ค้นหา
+  lede: "ค้นหาทั่วบริการ ผลงาน และบทความ"
+  placeholder: kubernetes, postmortem, finops...
+
+cta:
+  learn_more: เรียนรู้เพิ่มเติม →
+
+footer:
+  tagline: "บริษัทที่ปรึกษาด้านวิศวกรรมซอฟต์แวร์และ IT จากกรุงเทพฯ"
+  newsletter_title: Engineering insights รายเดือน
+  newsletter_lede: "อีเมลสั้นๆ เดือนละครั้ง: post-mortem, แพทเทิร์น infra, และเครื่องมือที่เราชอบ ยกเลิก subscribe ได้ในคลิกเดียว"
+  newsletter_placeholder: you@company.com
+  newsletter_submit: สมัคร
+  newsletter_success: "ขอบคุณ! ส่งอีเมลยืนยันไปแล้ว"
+  newsletter_already: "คุณสมัครอยู่แล้ว"
+  newsletter_invalid: "ดูเหมือนอีเมลไม่ถูกต้อง"
+  newsletter_required: "กรุณากรอกอีเมล"
+  sitemap: Sitemap
+  rss: RSS feed
+  copyright: "สงวนลิขสิทธิ์"
+
+errors:
+  404_title: "404 — ไม่พบหน้านี้"
+  404_body: "หน้าที่คุณกำลังมองหาไม่มีอยู่ (หรือถูกย้าย)"
+  back_home: กลับหน้าแรก
+  server_error: "มีบางอย่างผิดพลาดที่ฝั่งเรา กรุณาลองใหม่อีกครั้ง"
+  validation_required: "กรุณากรอกชื่อ อีเมล และข้อความ"
+  validation_consent: "กรุณายืนยันว่าคุณได้อ่านนโยบายความเป็นส่วนตัว"
+  validation_honeypot: "ดูเหมือนว่าส่งมาจากบอท"
+
+buttons:
+  back: "← กลับ"
+  view: "ดู →"
+
+common:
+  read_more: อ่านเพิ่มเติม →
+  by: "โดย"
+  all: ทั้งหมด

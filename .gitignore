@@ -1,0 +1,22 @@
+# Go
+bin/
+*.exe
+*.test
+*.out
+.env
+.env.local
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Backup
+*.zip

@@ -1,0 +1,34 @@
+{{template "header" .}}
+<article>
+  <header class="project-hero">
+    <div class="container">
+      <a href="/blog" class="back">← All posts</a>
+      <h1>{{.Post.Title}}</h1>
+      <p class="lede">{{.Post.Summary}}</p>
+
+      <div class="project-meta">
+        <span class="meta-item">
+          <strong>Published:</strong> {{.Post.PublishedAt.Format "January 2, 2006"}}
+        </span>
+        {{if .Post.Author}}
+        <span class="meta-item">
+          <strong>By:</strong> {{.Post.Author}}
+        </span>
+        {{end}}
+      </div>
+
+      {{if .Post.Tags}}
+      <div class="tags" style="margin-top: var(--space-4);">
+        {{range .Post.Tags}}<a href="/blog/tag/{{.}}" class="tag tag-accent">{{.}}</a>{{end}}
+      </div>
+      {{end}}
+    </div>
+  </header>
+
+  <div class="container section detail">
+    <div class="body">
+      {{safeHTML .Post.BodyHTML}}
+    </div>
+  </div>
+</article>
+{{template "footer" .}}

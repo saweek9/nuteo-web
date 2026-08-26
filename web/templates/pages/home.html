@@ -1,0 +1,92 @@
+{{template "header" .}}
+<section class="hero">
+  <div class="container">
+    <h1>Engineering systems that scale, reliably.</h1>
+    <p class="lede">
+      nuteo solution designs, builds, and operates backend systems and
+      platforms for teams that need real production outcomes — not slides.
+    </p>
+    <div class="hero-actions">
+      <a href="/contact?topic=intro" class="btn btn-primary">Start a conversation</a>
+      <a href="/portfolio" class="btn btn-secondary">See our work</a>
+    </div>
+  </div>
+</section>
+
+<section class="container section">
+  <h2 style="text-align: center;">What we do</h2>
+  <p class="lede" style="text-align: center; max-width: 720px; margin-inline: auto;">
+    End-to-end engineering and operations — from a single component
+    to a full platform.
+  </p>
+
+  <div class="grid grid-3">
+    {{range .FeaturedServices}}
+    <a href="{{.CTAHref}}" class="card service-card" data-animate>
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <path d="M3 15a4 4 0 014-4h.5a3 3 0 116 0H14a4 4 0 014 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2v-1z"></path>
+        </svg>
+      </div>
+      <h3>{{.Title}}</h3>
+      <p>{{.Summary}}</p>
+      <span class="arrow">{{.CTALabel}} →</span>
+    </a>
+    {{end}}
+  </div>
+
+  <p style="text-align: center; margin-top: var(--space-8);">
+    <a href="/services" class="btn btn-secondary">All services →</a>
+  </p>
+</section>
+
+<section class="container section">
+  <h2 style="text-align: center;">Selected work</h2>
+  <p class="lede" style="text-align: center; max-width: 720px; margin-inline: auto;">
+    Concrete outcomes, not case studies padded with adjectives.
+  </p>
+
+  <div class="grid grid-2">
+    {{range .FeaturedPortfolio}}
+    <a href="/portfolio/{{.Slug}}" class="card" data-animate>
+      <p class="meta">{{.Industry}} · {{.Year}}</p>
+      <h3>{{.Title}}</h3>
+      <p>{{.Summary}}</p>
+      <span class="arrow">Read more →</span>
+    </a>
+    {{end}}
+  </div>
+
+  <p style="text-align: center; margin-top: var(--space-8);">
+    <a href="/portfolio" class="btn btn-secondary">All projects →</a>
+  </p>
+</section>
+
+<section class="container section">
+  <div class="testimonials">
+    <h2 style="text-align: center;">What clients say</h2>
+    <div class="grid grid-2" style="margin-top: var(--space-6);">
+      <div class="testimonial" data-animate>
+        <blockquote>
+          They migrated our platform without a single minute of customer-facing
+          downtime — and cut our monthly cloud bill by 40%.
+        </blockquote>
+        <cite>
+          <strong>VP Engineering</strong>
+          Series B fintech, APAC
+        </cite>
+      </div>
+      <div class="testimonial" data-animate>
+        <blockquote>
+          First time I've worked with consultants who actually run what they build.
+          Our on-call used to be painful; now it's predictable.
+        </blockquote>
+        <cite>
+          <strong>Head of Platform</strong>
+          Logistics scaleup
+        </cite>
+      </div>
+    </div>
+  </div>
+</section>
+{{template "footer" .}}
