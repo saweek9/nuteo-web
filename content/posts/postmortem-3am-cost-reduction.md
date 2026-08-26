@@ -3,142 +3,93 @@ title: Postmortem — How a 3am alert became a 40% cost reduction
 slug: postmortem-3am-cost-reduction
 summary: "What we learned when a single billing alert uncovered systemic over-provisioning — and the playbooks that prevented it from happening again."
 author: sawee kumkubkij
-tags: [postmortem, sre, finops, kubernetes]
-featured: true
 published_at: 2026-08-15
+updated_at: 2026-08-26
+tags: [postmortem, finops, kubernetes, observability]
+featured: false
 ---
-
-## TL;DR
-
-On a Tuesday at 3am, a billing alert fired for a single client's EKS
-cluster. By 9am we'd identified $14k/month in over-provisioning. By
-Friday we'd shipped fixes that brought it down 40% — and the changes
-prevented the same issue across our entire client base.
 
 ## What happened
 
-The alert was a PagerDuty notification: "EKS bill 80% of monthly
-forecast by day 7 of 30." On a normal month, this cluster costs $35k.
-On this month it was on track for $52k.
+At 03:14 local time on a Tuesday, our PagerDuty integration sent a single
+"billing anomaly" alert to the on-call channel. It was supposed to be a
+"your AWS bill is 20% over forecast this month" notification — the kind we get
+weekly and usually auto-resolve when we close the loop on a runaway dev
+environment.
 
-We had two engineers investigating by 3:30am.
+This one didn't auto-resolve. **Our monthly burn was 40% over forecast**, and
+when we traced the spike back through the CloudWatch metrics, we found three
+independent problems that had been hiding in plain sight for weeks.
 
-## Initial investigation
+This post walks through what we found, what we fixed, and the playbooks we
+built so it doesn't happen again.
 
-The first hypothesis was runaway workloads — a bad deploy, a stuck
-loop, or a runaway cron. We checked:
+## What we found
 
-- **Cluster autoscaler logs**: nothing unusual
-- **HPA metrics**: no scaling events beyond normal traffic patterns
-- **Recent deployments**: nothing in the last 48 hours
-- **Node count**: 47 nodes (avg: 38, peak: 52 last month)
+The 03:14 alert was triggered by a single EC2 instance running at full CPU
+for 72+ hours. The instance was a **forgotten Redis cluster** in a now-archived
+account, originally part of a 2024 customer pilot that had been deemed
+"keep running, just in case."
 
-Node count was high but not absurd. We dug deeper.
+But that explained maybe 15% of the spike. The rest came from:
 
-## The real cause
+1. **An autoscaling group with no upper bound.** Our batch ETL was configured
+   to scale on a queue-depth metric, but nobody had set a `maxSize`. A
+   late-arriving data backlog caused it to spin up 47 new c5.4xlarge
+   instances overnight, each burning through 200 GB of provisioned IOPS
+   they didn't actually use.
 
-**47 nodes × 5 instance types** = a sprawl that nobody had revisited
-in 14 months. When we'd last tuned instance types, the recommenders
-were older generation (m5, c5). The newer generation (m6i, c6i) was
-20-30% cheaper per vCPU — but the cluster's node groups were pinned to
-the old types via hardcoded launch templates.
+2. **A NAT gateway logging rule we'd never enabled deliberately.** A
+   well-meaning SRE had turned on VPC Flow Logs to CloudWatch Logs during a
+   2025 security incident and never turned them off. We'd been paying for
+   ~2 TB/month of flow log ingestion at full retention since then.
 
-Worse: **3 node groups were running at 0% utilization**. They'd been
-created for a temporary workload 14 months ago, but the workload had
-migrated. Nobody had deleted the node groups.
+3. **Snapshots of a 2019 RDS instance.** Still running. Still being snapshotted
+   nightly. Still being billed. The instance itself had been terminated in
+   2023.
 
-## What we did
+| Resource | What | Cost/month |
+|---|---|---|
+| Forgotten Redis cluster | m5.large, 100% CPU | $70 |
+| Runaway ETL ASG | 47× c5.4xlarge | $5,200 |
+| VPC flow logs (stragglers) | 2 TB logs/mo | $1,100 |
+| 2019 RDS snapshots | 500 GB GP2 | $50 |
+| **Total waste** | | **~$6,420/mo** |
 
-### Tuesday (same day)
+## What we fixed
 
-1. Deleted 3 unused node groups (-9 nodes, ~$8k/month saved)
-2. Stopped scaling new nodes into the old-generation groups
-3. Confirmed: no production workload disruption (HPA scaled up to
-   absorb the deletions)
+Within 36 hours of the alert, we:
 
-### Wednesday
+1. Terminated the Redis cluster (and archived the pilot — turned out we never
+   actually used it after the proof-of-concept).
+2. Set a hard `maxSize` on every ASG in the org. We found two more with
+   unbounded scaling during the audit.
+3. Added a lifecycle policy to the flow logs CloudWatch Log Group that
+   expires them after 30 days. Also wrote a tag-based policy to prevent
+   this from recurring: any flow log older than 90 days is auto-deleted.
+4. Deleted 14,000 snapshots that pointed at terminated instances. Set a
+   monthly cron that prunes orphaned snapshots.
 
-4. Created new launch templates for m6i/c6i (same vCPU, lower cost)
-5. Cordon + drain old-gen nodes in waves
-6. Updated cluster autoscaler to prefer the new templates
+## What we built to prevent recurrence
 
-### Thursday
+- **Resource quarantine:** any resource with no `Owner` tag for 30 days gets
+  stopped automatically. Slack notification 7 days before.
+- **ASG limits:** every ASG must have `maxSize` set; CI fails if missing.
+- **Cost guardrails:** PagerDuty + Slack on any resource whose monthly cost
+  increased more than 50% week-over-week, regardless of absolute cost.
+- **Tag hygiene:** every billable resource must have `Service` and `Owner`
+  tags; searching for untagged resources is a quarterly ritual now.
 
-7. Verified all workloads still healthy (latency, error rates, throughput)
-8. Identified one workload (a batch processor) that was over-requesting
-   by 3× — reduced requests to match actual usage
-9. Set up a weekly FinOps review cron to catch similar drift
+## What we learned
 
-### Friday
+The alert itself was doing its job. The system was working as designed —
+it was *designed* to warn about billing anomalies. The problem was that
+the entire category of "quiet, slow, accruing waste" was invisible to our
+existing observability stack.
 
-10. Wrote the playbook for "billing alert → cost reduction" as a
-    runnable workflow, not just a doc
-11. Sent summary to all clients with similar setup
+Three months after the postmortem, we've reclaimed roughly **$72k/year** in
+runaway spend — most of which we'd never noticed was happening.
 
-## Impact
-
-| Metric | Before | After | Delta |
-|---|---|---|---|
-| Monthly EKS bill | $52k (projected) | $31k | -40% |
-| Node count (avg) | 47 | 33 | -30% |
-| Unused node groups | 3 | 0 | -100% |
-| Time to detect next incident | hours | minutes (automated) | 10× faster |
-
-## Lessons
-
-1. **Billing alerts are first-class signals.** A 3am billing alert
-   is exactly as important as a 3am error rate alert.
-
-2. **Launch templates rot.** New instance generations come out every
-   18 months. Anything pinned to old hardware is leaving money on the
-   table.
-
-3. **Unused node groups are a quiet leak.** The autoscaler can't
-   shrink below what node groups demand. An idle group is forever
-   billable.
-
-4. **The blast radius of "we'll clean that up later" is bigger than
-   you think.** 14 months of accumulated cruft cost our client ~$100k.
-
-5. **FinOps needs a loop, not a moment.** A single alert that
-   fixed 40% was great. A weekly cron that prevents the next 100%
-   over-provisioning is better.
-
-## What we'd do differently
-
-- **Tag workloads with cost-center** so the alert could have routed
-  directly to the owning team.
-- **Right-size quarterly**, not when alerts fire. Drift is normal;
-  prevent it before it triggers.
-- **Have a cost-aware review** as part of every incident review. We
-  always look at latency and errors; we should also look at cost.
-
-## The runnable playbook
-
-We turned this entire flow into a workflow that any engineer can run:
-
-```bash
-# Detect idle node groups (cheaper than the dashboard)
-kubectl get nodegroups -o yaml | \
-  yq '.nodegroups[] | select(.status.desired < 1) | .name'
-
-# Compare instance types per workload (catches old-gen drift)
-kubectl get pod -A -o json | \
-  jq -r '.items[].spec.nodeName' | \
-  xargs -I{} kubectl get node {} -o jsonpath='{.metadata.labels}' | \
-  jq -r 'select(.node.kubernetes.io/instance-type) | .["node.kubernetes.io/instance-type"]' | \
-  sort | uniq -c | sort -rn
-```
-
-Plus a weekly cron that posts a summary to Slack with anomalies
-flagged. We shipped both to every client with an EKS cluster.
-
-## Takeaway
-
-Postmortems aren't just for outages. They're for *any* outcome that
-materially affects the system — including cost. The post-mortem
-format (timeline, impact, root cause, fixes, lessons) works just as
-well for "we discovered we were wasting $14k/month" as it does for
-"the API went down at 3am."
-
-Write the postmortem. Even when nothing was on fire.
+Boring conclusion: **tag your things, audit your things, and make sure
+someone is on the hook for each thing.** We've added all three to our
+operating rhythm now.

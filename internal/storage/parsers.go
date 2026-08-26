@@ -102,6 +102,7 @@ func (s *serviceModel) SetHTML(h string)  { s.Service.BodyHTML = h }
 func (s *serviceModel) SetMD(m string)    { s.Service.BodyMD = m }
 func (s *serviceModel) SetPublishedIfZero(t time.Time) {
 	if s.Service.PublishedAt.IsZero() { s.Service.PublishedAt = t }
+	if s.Service.UpdatedAt.IsZero() { s.Service.UpdatedAt = s.Service.PublishedAt }
 }
 
 type portfolioModel struct {
@@ -111,6 +112,7 @@ type portfolioModel struct {
 func (p *portfolioModel) SetHTML(h string)  { p.Portfolio.BodyHTML = h }
 func (p *portfolioModel) SetMD(m string)    { p.Portfolio.BodyMD = m }
 func (p *portfolioModel) SetPublishedIfZero(t time.Time) {
+	// Portfolio model has no UpdatedAt — use PublishedAt for sort display.
 	if p.Portfolio.PublishedAt.IsZero() { p.Portfolio.PublishedAt = t }
 }
 
@@ -122,4 +124,5 @@ func (p *postModel) SetHTML(h string)  { p.Post.BodyHTML = h }
 func (p *postModel) SetMD(m string)    { p.Post.BodyMD = m }
 func (p *postModel) SetPublishedIfZero(t time.Time) {
 	if p.Post.PublishedAt.IsZero() { p.Post.PublishedAt = t }
+	if p.Post.UpdatedAt.IsZero() { p.Post.UpdatedAt = p.Post.PublishedAt }
 }

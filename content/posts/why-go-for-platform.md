@@ -6,6 +6,7 @@ author: sawee kumkubkij
 tags: [golang, architecture, devops]
 featured: true
 published_at: 2026-07-22
+updated_at: 2026-08-26
 ---
 
 ## TL;DR
