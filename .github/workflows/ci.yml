@@ -62,7 +62,7 @@ jobs:
 
       - name: Upload coverage artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-${{ matrix.go-version }}
           path: coverage.out
@@ -146,7 +146,7 @@ jobs:
           CGO_ENABLED=0 go build -ldflags="-s -w" -o nuteo-web ./cmd/server
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nuteo-web
           path: nuteo-web
