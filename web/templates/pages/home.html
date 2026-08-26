@@ -1,23 +1,19 @@
 {{template "header" .}}
 <section class="hero">
   <div class="container">
-    <h1>Engineering systems that scale, reliably.</h1>
-    <p class="lede">
-      nuteo solution designs, builds, and operates backend systems and
-      platforms for teams that need real production outcomes — not slides.
-    </p>
+    <h1>{{t "hero.title" $.Lang}}</h1>
+    <p class="lede">{{t "hero.lede" $.Lang}}</p>
     <div class="hero-actions">
-      <a href="/contact?topic=intro" class="btn btn-primary">Start a conversation</a>
-      <a href="/portfolio" class="btn btn-secondary">See our work</a>
+      <a href="/contact?topic=intro" class="btn btn-primary">{{t "hero.cta_primary" $.Lang}}</a>
+      <a href="/portfolio" class="btn btn-secondary">{{t "hero.cta_secondary" $.Lang}}</a>
     </div>
   </div>
 </section>
 
 <section class="container section">
-  <h2 style="text-align: center;">What we do</h2>
+  <h2 style="text-align: center;">{{t "home.section_what_title" $.Lang}}</h2>
   <p class="lede" style="text-align: center; max-width: 720px; margin-inline: auto;">
-    End-to-end engineering and operations — from a single component
-    to a full platform.
+    {{t "home.section_what_lede" $.Lang}}
   </p>
 
   <div class="grid grid-3">
@@ -36,14 +32,14 @@
   </div>
 
   <p style="text-align: center; margin-top: var(--space-8);">
-    <a href="/services" class="btn btn-secondary">All services →</a>
+    <a href="/services" class="btn btn-secondary">{{t "home.view_all_services" $.Lang}}</a>
   </p>
 </section>
 
 <section class="container section">
-  <h2 style="text-align: center;">Selected work</h2>
+  <h2 style="text-align: center;">{{t "home.section_work_title" $.Lang}}</h2>
   <p class="lede" style="text-align: center; max-width: 720px; margin-inline: auto;">
-    Concrete outcomes, not case studies padded with adjectives.
+    {{t "home.section_work_lede" $.Lang}}
   </p>
 
   <div class="grid grid-2">
@@ -52,38 +48,46 @@
       <p class="meta">{{.Industry}} · {{.Year}}</p>
       <h3>{{.Title}}</h3>
       <p>{{.Summary}}</p>
-      <span class="arrow">Read more →</span>
+      <span class="arrow">{{t "common.read_more" $.Lang}}</span>
     </a>
     {{end}}
   </div>
 
   <p style="text-align: center; margin-top: var(--space-8);">
-    <a href="/portfolio" class="btn btn-secondary">All projects →</a>
+    <a href="/portfolio" class="btn btn-secondary">{{t "home.view_all_projects" $.Lang}}</a>
   </p>
 </section>
 
 <section class="container section">
   <div class="testimonials">
-    <h2 style="text-align: center;">What clients say</h2>
+    <h2 style="text-align: center;">{{t "home.section_testimonials_title" $.Lang}}</h2>
     <div class="grid grid-2" style="margin-top: var(--space-6);">
       <div class="testimonial" data-animate>
         <blockquote>
+          {{if eq .Lang "th"}}
+          พวกเขาย้ายแพลตฟอร์มของเราโดยไม่มี downtime ที่ลูกค้าเห็น และลดค่าใช้จ่าย cloud รายเดือนลง 40%
+          {{else}}
           They migrated our platform without a single minute of customer-facing
           downtime — and cut our monthly cloud bill by 40%.
+          {{end}}
         </blockquote>
         <cite>
-          <strong>VP Engineering</strong>
-          Series B fintech, APAC
+          <strong>{{if eq .Lang "th"}}ผู้อำนวยการฝ่ายวิศวกรรม{{else}}VP Engineering{{end}}</strong>
+          {{if eq .Lang "th"}}Fintech Series B, เอเชียแปซิฟิก{{else}}Series B fintech, APAC{{end}}
         </cite>
       </div>
       <div class="testimonial" data-animate>
         <blockquote>
+          {{if eq .Lang "th"}}
+          เป็นครั้งแรกที่ผมทำงานกับที่ปรึกษาที่รันสิ่งที่ตัวเองสร้างจริงๆ ตอนนี้ on-call ไม่เจ็บปวดแล้ว — มันคาดเดาได้
+          {{else}}
           First time I've worked with consultants who actually run what they build.
           Our on-call used to be painful; now it's predictable.
+          {{end}}
         </blockquote>
         <cite>
-          <strong>Head of Platform</strong>
-          Logistics scaleup
+          <strong>{{if eq .Lang "th"}}Head of Platform{{else}}Head of Platform{{end}}</strong>
+          {{if eq .Lang "th"}}โลจิสติกส์สตาร์ทอัพ{{else}}Logistics scaleup{{end}}
         </cite>
       </div>
     </div>

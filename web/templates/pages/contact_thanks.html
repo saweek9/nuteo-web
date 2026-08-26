@@ -1,7 +1,7 @@
 {{template "header" .}}
 <section class="container section narrow">
-  <h1>Thanks — we got it.</h1>
-  <p>Your message is on its way. We'll reply within <strong>1 business day</strong>.</p>
-  <p><a href="/" class="btn btn-secondary">Back to home</a></p>
+  <h1>{{t "contact.thanks" $.Lang}}</h1>
+  <p>{{t "contact.thanks_body" $.Lang}}</p>
+  <p><a href="/" class="btn btn-secondary">{{if eq .Lang "th"}}กลับหน้าแรก{{else}}Back to home{{end}}</a></p>
 </section>
 {{template "footer" .}}

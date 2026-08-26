@@ -1,7 +1,7 @@
 {{template "header" .}}
 <section class="container section">
-  <h1>Services</h1>
-  <p class="lede">End-to-end engineering and operations — from a single component to a full platform.</p>
+  <h1>{{t "services.title" $.Lang}}</h1>
+  <p class="lede">{{t "services.lede" $.Lang}}</p>
 
   <div class="grid grid-3">
     {{range .Services}}

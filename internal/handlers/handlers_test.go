@@ -16,6 +16,7 @@ import (
 
 	"github.com/nuteo/nuteo-web/internal/config"
 	"github.com/nuteo/nuteo-web/internal/email"
+	"github.com/nuteo/nuteo-web/internal/i18n"
 	"github.com/nuteo/nuteo-web/internal/middleware"
 	"github.com/nuteo/nuteo-web/internal/storage"
 )
@@ -37,6 +38,16 @@ func testDeps(t *testing.T, opts ...func(*testOptions)) (*Deps, *testOptions) {
 
 	root := t.TempDir()
 	mkContent(t, root)
+
+	// Build a minimal i18n bundle for tests from inline YAML so we
+	// don't need filesystem fixtures.
+	i18nDir := t.TempDir()
+	os.WriteFile(filepath.Join(i18nDir, "en.yaml"),
+		[]byte("hero:\n  title: Engineering systems that scale, reliably.\n"), 0644)
+	bundle, err := i18n.NewBundle(i18nDir)
+	if err != nil {
+		t.Fatalf("i18n.NewBundle: %v", err)
+	}
 
 	cfg := &config.Config{
 		Env:               "development",
@@ -66,7 +77,7 @@ func testDeps(t *testing.T, opts ...func(*testOptions)) (*Deps, *testOptions) {
 
 	mail := email.NewSMTPSender(cfg) // no-op when SMTPHost empty
 
-	deps := &Deps{Cfg: cfg, Store: store, Mail: mail}
+	deps := &Deps{Cfg: cfg, Store: store, Mail: mail, I18n: bundle}
 	return deps, options
 }
 

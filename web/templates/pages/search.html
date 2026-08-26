@@ -1,11 +1,11 @@
 {{template "header" .}}
 <section class="container section narrow">
-  <h1>Search</h1>
-  <p class="lede">Search across services, portfolio, and blog posts.</p>
+  <h1>{{t "search.title" $.Lang}}</h1>
+  <p class="lede">{{t "search.lede" $.Lang}}</p>
 
   <form method="GET" action="/search" class="search-form" style="margin: var(--space-6) 0;">
-    <input type="search" name="q" value="{{.Query}}" placeholder="kubernetes, postmortem, finops..." autofocus>
-    <button type="submit" class="btn btn-primary">Search</button>
+    <input type="search" name="q" value="{{.Query}}" placeholder="{{t "search.placeholder" $.Lang}}" autofocus>
+    <button type="submit" class="btn btn-primary">{{if eq .Lang "th"}}ค้นหา{{else}}Search{{end}}</button>
   </form>
 
   {{template "search_results" .}}

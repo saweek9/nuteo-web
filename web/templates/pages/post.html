@@ -2,17 +2,17 @@
 <article>
   <header class="project-hero">
     <div class="container">
-      <a href="/blog" class="back">← All posts</a>
+      <a href="/blog" class="back">← {{t "blog.back" $.Lang}}</a>
       <h1>{{.Post.Title}}</h1>
       <p class="lede">{{.Post.Summary}}</p>
 
       <div class="project-meta">
         <span class="meta-item">
-          <strong>Published:</strong> {{.Post.PublishedAt.Format "January 2, 2006"}}
+          <strong>{{t "blog.published" $.Lang}}:</strong> {{.Post.PublishedAt.Format "January 2, 2006"}}
         </span>
         {{if .Post.Author}}
         <span class="meta-item">
-          <strong>By:</strong> {{.Post.Author}}
+          <strong>{{t "blog.by" $.Lang}}:</strong> {{.Post.Author}}
         </span>
         {{end}}
       </div>

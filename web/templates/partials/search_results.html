@@ -2,7 +2,7 @@
   {{if .Query}}
     {{if .Results}}
     <p style="color: var(--fg-muted); margin-bottom: var(--space-3); font-size: 0.875rem;">
-      {{.Count}} {{if eq (printf "%d" .Count) "1"}}result{{else}}results{{end}} for "<strong>{{.Query}}</strong>"
+      {{.Count}} {{if eq (printf "%d" .Count) "1"}}{{if eq .Lang "th"}}ผลลัพธ์{{else}}result{{end}}{{else}}{{if eq .Lang "th"}}ผลลัพธ์{{else}}results{{end}}{{end}} {{if eq .Lang "th"}}สำหรับ{{else}}for{{end}} "<strong>{{.Query}}</strong>"
     </p>
     <ul class="search-results-list">
       {{range .Results}}
@@ -17,13 +17,13 @@
     </ul>
     {{else}}
     <p style="color: var(--fg-muted); padding: var(--space-4); text-align: center;">
-      No matches for "<strong>{{.Query}}</strong>". Try different keywords.
+      {{if eq .Lang "th"}}ไม่พบ{{else}}No matches for{{end}} "<strong>{{.Query}}</strong>". {{if eq .Lang "th"}}ลองคำอื่น{{else}}Try different keywords{{end}}.
     </p>
     {{end}}
   {{else}}
-    <p style="color: var(--fg-muted); padding: var(--space-4); text-align: center;">
-      Type to search across services, portfolio, and blog posts.
-    </p>
+  <p style="color: var(--fg-muted); padding: var(--space-4); text-align: center;">
+    {{if eq .Lang "th"}}พิมพ์เพื่อค้นหา{{else}}Type to search{{end}} {{if eq .Lang "th"}}ทั่วทั้งบริการ ผลงาน และบทความ{{else}}across services, portfolio, and blog posts{{end}}.
+  </p>
   {{end}}
 </div>
 <style>

@@ -1,6 +1,6 @@
 {{template "header" .}}
 <section class="container section narrow">
-  <h1>Admin Login</h1>
+  <h1>{{t "admin.title" $.Lang}}</h1>
 
   {{if .Error}}
   <div class="alert error" role="alert">{{.Error}}</div>
@@ -8,15 +8,15 @@
 
   <form method="POST" action="/admin/login" class="contact-form" autocomplete="on">
     <div>
-      <label for="user">Username</label>
+      <label for="user">{{t "admin.username" $.Lang}}</label>
       <input id="user" name="user" type="text" required autocomplete="username" autofocus>
     </div>
     <div>
-      <label for="pass">Password</label>
+      <label for="pass">{{t "admin.password" $.Lang}}</label>
       <input id="pass" name="pass" type="password" required autocomplete="current-password">
     </div>
     <div>
-      <button type="submit" class="btn btn-primary">Sign in</button>
+      <button type="submit" class="btn btn-primary">{{t "admin.signin" $.Lang}}</button>
     </div>
   </form>
 </section>

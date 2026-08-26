@@ -1,7 +1,7 @@
 {{template "header" .}}
 <section class="container section">
-  <h1>Blog</h1>
-  <p class="lede">Engineering articles, post-mortems, and notes from the team.</p>
+  <h1>{{t "blog.title" $.Lang}}</h1>
+  <p class="lede">{{t "blog.lede" $.Lang}}</p>
 
   {{if .Posts}}
   <div class="grid grid-2" style="margin-top: var(--space-8);">
@@ -20,7 +20,7 @@
   </div>
   {{else}}
   <div style="text-align: center; padding: var(--space-12) 0; color: var(--fg-muted);">
-    <p>No posts yet. Check back soon.</p>
+    <p>{{t "blog.no_posts" $.Lang}}</p>
   </div>
   {{end}}
 </section>

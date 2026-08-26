@@ -1,7 +1,10 @@
 {{template "header" .}}
 <section class="container section narrow">
-  <h1>Frequently asked questions</h1>
-  <p class="lede">Common questions about working with nuteo solution. Don't see yours? <a href="/contact">Drop us a line</a>.</p>
+  <h1>{{t "faq.title" $.Lang}}</h1>
+  <p class="lede">
+    {{t "faq.lede" $.Lang}}
+    <a href="/contact">{{if eq .Lang "th"}}ส่งข้อความหาเรา{{else}}Drop us a line{{end}}</a>.
+  </p>
 
   <div class="faq-list">
     {{range .FAQs}}
@@ -15,7 +18,8 @@
   </div>
 
   <p style="margin-top: var(--space-8); text-align: center;">
-    Still have questions? <a href="/contact" class="btn btn-primary">Ask us directly →</a>
+    {{if eq .Lang "th"}}ยังมีคำถามอยู่?{{else}}Still have questions?{{end}}
+    <a href="/contact" class="btn btn-primary">{{t "faq.ask_directly" $.Lang}} →</a>
   </p>
 </section>
 {{template "footer" .}}

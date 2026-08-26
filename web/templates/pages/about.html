@@ -1,13 +1,26 @@
 {{template "header" .}}
 <article class="container section detail">
-  <h1>About nuteo solution</h1>
-  <p>nuteo solution is a Bangkok-based engineering consultancy focused on backend
-  systems and platform engineering. We work with engineering teams that
-  need to <strong>ship reliable infrastructure</strong> — not PowerPoint decks
-  about it.</p>
+  <h1>{{t "nav.about" $.Lang}}</h1>
+  <p>
+    {{if eq .Lang "th"}}
+    nuteo solution เป็นบริษัทที่ปรึกษาด้านวิศวกรรมในกรุงเทพฯ ที่เน้นระบบ backend และ platform engineering
+    เราทำงานกับทีมวิศวกรรมที่ต้องการ <strong>ส่งมอบโครงสร้างพื้นฐานที่เชื่อถือได้</strong> — ไม่ใช่ PowerPoint เกี่ยวกับมัน
+    {{else}}
+    nuteo solution is a Bangkok-based engineering consultancy focused on backend
+    systems and platform engineering. We work with engineering teams that
+    need to <strong>ship reliable infrastructure</strong> — not PowerPoint decks
+    about it.
+    {{end}}
+  </p>
 
-  <h2>What we believe</h2>
+  <h2>{{if eq .Lang "th"}}สิ่งที่เราเชื่อ{{else}}What we believe{{end}}</h2>
   <ul>
+    {{if eq .Lang "th"}}
+    <li><strong>การดำเนินงานคือผลิตภัณฑ์</strong> ความน่าเชื่อถือ การสังเกตการณ์ และสุขภาพของ on-call คือฟีเจอร์ที่หันหน้าให้ผู้ใช้</li>
+    <li><strong>เสร็จ หมายถึง deploy แล้ว ตรวจสอบได้ และมีเอกสาร</strong> โค้ดที่อยู่บน branch คือทำเสร็จครึ่งหนึ่ง</li>
+    <li><strong>วิศวกรอาวุโส ไม่ใช่การเสริมทีม</strong> งานส่วนใหญ่จับคู่คุณกับคนที่เคยตื่นมาตอนตี 3 มาแล้ว</li>
+    <li><strong>ภาษาที่เรียบง่าย ซอฟต์แวร์ที่ใช้งานได้ ไม่มีเวทมนตร์</strong> ถ้าอธิบายบนกระดานไวท์บอร์ดไม่ได้ เราก็ไม่ส่ง</li>
+    {{else}}
     <li><strong>Operations is a product.</strong> Reliability, observability,
         and on-call health are user-facing features.</li>
     <li><strong>Done means deployed, monitored, and documented.</strong>
@@ -16,25 +29,46 @@
         engagements pair you with people who've been on call at 3am.</li>
     <li><strong>Plain language, working software, no magic.</strong> If
         we can't explain it on a whiteboard, we don't ship it.</li>
+    {{end}}
   </ul>
 
-  <h2>How we work</h2>
-  <p>Most engagements are 6–12 weeks, scoped to a concrete outcome
-  (a migrated platform, a CI/CD overhaul, an incident review). We embed
-  with your team, hand off everything we build, and stick around for the
-  post-mortem that always follows.</p>
+  <h2>{{if eq .Lang "th"}}วิธีทำงาน{{else}}How we work{{end}}</h2>
+  <p>
+    {{if eq .Lang "th"}}
+    งานส่วนใหญ่ใช้เวลา 6-12 สัปดาห์ มีวิศวกรอาวุโส 1-2 คนทำงานร่วมกับทีมของคุณ เราจะส่งมอบทุกอย่างที่สร้าง และอยู่ด้วยกับคุณในการทบทวนหลังเสร็จเสมอ
+    {{else}}
+    Most engagements are 6–12 weeks, scoped to a concrete outcome
+    (a migrated platform, a CI/CD overhaul, an incident review). We embed
+    with your team, hand off everything we build, and stick around for the
+    post-mortem that always follows.
+    {{end}}
+  </p>
 
-  <h2>Who we are</h2>
-  <p>Founded in 2024 by engineers who've spent a decade building and
-  operating production systems across logistics, fintech, and SaaS.
-  Small team by design.</p>
+  <h2>{{if eq .Lang "th"}}เราเป็นใคร{{else}}Who we are{{end}}</h2>
+  <p>
+    {{if eq .Lang "th"}}
+    ก่อตั้งในปี 2024 โดยวิศวกรที่ใช้เวลาทศวรรษในการสร้างและดูแลระบบ production ในโลจิสติกส์ fintech และ SaaS ทีมเล็กๆ โดยการออกแบบ
+    {{else}}
+    Founded in 2024 by engineers who've spent a decade building and
+    operating production systems across logistics, fintech, and SaaS.
+    Small team by design.
+    {{end}}
+  </p>
 
-  <h2>Where we work</h2>
-  <p>Bangkok-based, working with teams across APAC and remote-first
-  companies globally. Comfortable in English; Thai clients welcome.</p>
+  <h2>{{if eq .Lang "th"}}ที่ทำงาน{{else}}Where we work{{end}}</h2>
+  <p>
+    {{if eq .Lang "th"}}
+    ตั้งอยู่ในกรุงเทพฯ ทำงานกับทีมทั่ว APAC และบริษัทที่ทำงานแบบ remote-first ทั่วโลก สื่อสารภาษาอังกฤษได้คล่อง
+    {{else}}
+    Bangkok-based, working with teams across APAC and remote-first
+    companies globally. Comfortable in English.
+    {{end}}
+  </p>
 
   <p style="margin-top: var(--space-8);">
-    <a href="/contact?topic=intro" class="btn btn-primary">Talk to us →</a>
+    <a href="/contact?topic=intro" class="btn btn-primary">
+      {{if eq .Lang "th"}}พูดคุยกับเรา{{else}}Talk to us{{end}} →
+    </a>
   </p>
 </article>
 {{template "footer" .}}

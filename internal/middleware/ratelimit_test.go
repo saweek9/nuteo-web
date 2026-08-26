@@ -64,13 +64,16 @@ func TestIPRateLimiterGC(t *testing.T) {
 	rl.Allow("1.1.1.1")
 	rl.Allow("2.2.2.2")
 
+	rl.mu.Lock()
 	if got := len(rl.clients); got != 2 {
 		t.Errorf("clients: got %d want 2", got)
 	}
+	rl.mu.Unlock()
 
 	// Wait for window + GC tick (window is 30ms; GC runs every 30ms; wait 100ms)
 	time.Sleep(100 * time.Millisecond)
 
+	// Read under lock to avoid racing the GC goroutine.
 	rl.mu.Lock()
 	n := len(rl.clients)
 	rl.mu.Unlock()

@@ -1,6 +1,6 @@
 {{template "header" .}}
 <article class="container section detail">
-  <a href="/services" class="back">← All services</a>
+  <a href="/services" class="back">← {{t "blog.back" $.Lang}}</a>
   <h1>{{.Service.Title}}</h1>
   <p class="lede">{{.Service.Summary}}</p>
 
@@ -16,7 +16,7 @@
 
   {{if .Service.CTAHref}}
   <p style="margin-top: var(--space-8);">
-    <a href="{{.Service.CTAHref}}" class="btn btn-primary">{{default "Talk to us" .Service.CTALabel}} →</a>
+    <a href="{{.Service.CTAHref}}" class="btn btn-primary">{{default (t "services.talk_to_us" .Lang) .Service.CTALabel}} →</a>
   </p>
   {{end}}
 </article>

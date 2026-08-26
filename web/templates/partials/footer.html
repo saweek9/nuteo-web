@@ -2,13 +2,13 @@
   </main>
 
   <section class="newsletter container">
-    <h3>Engineering insights, monthly</h3>
-    <p>One short email per month: post-mortems, infra patterns, and tools we like. Unsubscribe in one click.</p>
+    <h3>{{t "footer.newsletter_title" $.Lang}}</h3>
+    <p>{{t "footer.newsletter_lede" $.Lang}}</p>
     <form class="newsletter-form" action="/newsletter" method="post" novalidate>
-      <label for="newsletter-email" class="sr-only">Email address</label>
+      <label for="newsletter-email" class="sr-only">{{t "nav.contact" $.Lang}}</label>
       <input id="newsletter-email" type="email" name="email" required
-             placeholder="you@company.com" autocomplete="email">
-      <button type="submit" class="btn btn-primary">Subscribe</button>
+             placeholder="{{t "footer.newsletter_placeholder" $.Lang}}" autocomplete="email">
+      <button type="submit" class="btn btn-primary">{{t "footer.newsletter_submit" $.Lang}}</button>
     </form>
   </section>
 
@@ -17,44 +17,44 @@
       <div>
         <strong>{{.SiteName}}</strong>
         <p style="color: var(--fg-muted); margin-top: 0.5rem;">
-          Software engineering &amp; IT consulting from Bangkok.
+          {{t "footer.tagline" $.Lang}}
         </p>
       </div>
 
       <div>
-        <h4>Services</h4>
+        <h4>{{t "nav.services" $.Lang}}</h4>
         <ul>
-          <li><a href="/services/cloud-migration">Cloud migration</a></li>
-          <li><a href="/services/devops">DevOps &amp; SRE</a></li>
-          <li><a href="/services/backend">Backend APIs</a></li>
-          <li><a href="/services/security">Security &amp; compliance</a></li>
+          <li><a href="/services/cloud-migration">{{t "contact.topic_cloud" $.Lang}}</a></li>
+          <li><a href="/services/devops">{{t "contact.topic_devops" $.Lang}}</a></li>
+          <li><a href="/services/backend">{{t "contact.topic_backend" $.Lang}}</a></li>
+          <li><a href="/services/security">{{t "contact.topic_security" $.Lang}}</a></li>
         </ul>
       </div>
 
       <div>
-        <h4>Company</h4>
+        <h4>{{if eq .Lang "th"}}บริษัท{{else}}Company{{end}}</h4>
         <ul>
-          <li><a href="/about">About</a></li>
-          <li><a href="/portfolio">Portfolio</a></li>
-          <li><a href="/blog">Blog</a></li>
-          <li><a href="/faq">FAQ</a></li>
-          <li><a href="/contact">Contact</a></li>
+          <li><a href="/about">{{t "nav.about" $.Lang}}</a></li>
+          <li><a href="/portfolio">{{t "nav.portfolio" $.Lang}}</a></li>
+          <li><a href="/blog">{{t "nav.blog" $.Lang}}</a></li>
+          <li><a href="/faq">{{t "nav.faq" $.Lang}}</a></li>
+          <li><a href="/contact">{{t "nav.contact" $.Lang}}</a></li>
         </ul>
       </div>
 
       <div>
-        <h4>Connect</h4>
+        <h4>{{if eq .Lang "th"}}เชื่อมต่อ{{else}}Connect{{end}}</h4>
         <ul>
           {{if .GitHubURL}}<li><a href="{{.GitHubURL}}" rel="me noopener">GitHub</a></li>{{end}}
           {{if .LinkedInURL}}<li><a href="{{.LinkedInURL}}" rel="me noopener">LinkedIn</a></li>{{end}}
           {{if .TwitterURL}}<li><a href="{{.TwitterURL}}" rel="me noopener">Twitter / X</a></li>{{end}}
-          <li><a href="/sitemap.xml">Sitemap</a></li>
-          <li><a href="/rss.xml">RSS feed</a></li>
+          <li><a href="/sitemap.xml">{{t "footer.sitemap" $.Lang}}</a></li>
+          <li><a href="/rss.xml">{{t "footer.rss" $.Lang}}</a></li>
         </ul>
       </div>
 
       <div class="copyright">
-        © {{.Year}} {{.SiteName}}. All rights reserved.
+        © {{.Year}} {{.SiteName}}. {{t "footer.copyright" $.Lang}}.
       </div>
     </div>
   </footer>

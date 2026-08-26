@@ -107,3 +107,11 @@ common:
   read_more: Read more →
   by: "by"
   all: All
+
+admin:
+  title: Admin Login
+  username: Username
+  password: Password
+  signin: Sign in
+  bad_credentials: Invalid credentials.
+  disabled: Admin panel is not configured.

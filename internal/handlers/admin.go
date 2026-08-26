@@ -32,28 +32,44 @@ func (d *Deps) AdminLogin(c *gin.Context) {
 
 	switch c.Request.Method {
 	case http.MethodGet:
-		data := baseData(c, d, "Admin Login")
-		data["PageDescription"] = "Sign in to manage content."
-		data["Error"] = ""
+	if d.Cfg.AdminUser == "" || d.Cfg.AdminPassword == "" {
+		c.Status(http.StatusForbidden)
+		data := baseData(c, d, "Admin Disabled")
+		data["PageDescription"] = "Admin panel is not configured."
 		renderPage(c, data)
+		return
+	}
+	data := baseData(c, d, "Admin Login")
+	data["PageDescription"] = "Sign in to manage content."
+	data["Error"] = ""
+	data["AdminLoginTitle"] = "Admin Login"
+	data["UsernameLabel"] = "Username"
+	data["PasswordLabel"] = "Password"
+	data["SignInLabel"] = "Sign in"
+	renderPage(c, data)
 
 	case http.MethodPost:
-		user := c.PostForm("user")
-		pass := c.PostForm("pass")
+	user := c.PostForm("user")
+	pass := c.PostForm("pass")
 
-		// Constant-time compare on both fields
-		userOK := subtle.ConstantTimeCompare([]byte(user), []byte(d.Cfg.AdminUser)) == 1
-		passOK := subtle.ConstantTimeCompare([]byte(pass), []byte(d.Cfg.AdminPassword)) == 1
+	// Constant-time compare on both fields
+	userOK := subtle.ConstantTimeCompare([]byte(user), []byte(d.Cfg.AdminUser)) == 1
+	passOK := subtle.ConstantTimeCompare([]byte(pass), []byte(d.Cfg.AdminPassword)) == 1
 
-		if !userOK || !passOK {
-			slog.Warn("admin login failed", "user", user)
-			data := baseData(c, d, "Admin Login")
-			data["PageDescription"] = "Sign in to manage content."
-			data["Error"] = "Invalid credentials."
-			c.Status(http.StatusUnauthorized)
-			renderPage(c, data)
-			return
-		}
+	if !userOK || !passOK {
+		slog.Warn("admin login failed", "user", user)
+		c.Status(http.StatusUnauthorized)
+		switchLang := pickLang(c, d)
+		data := baseData(c, d, "Admin Login")
+		data["PageDescription"] = "Sign in to manage content."
+		data["Error"] = adminErrorMessage(switchLang)
+		data["AdminLoginTitle"] = "Admin Login"
+		data["UsernameLabel"] = "Username"
+		data["PasswordLabel"] = "Password"
+		data["SignInLabel"] = "Sign in"
+		renderPage(c, data)
+		return
+	}
 
 		// Success — set signed cookie
 		expires := time.Now().Add(8 * time.Hour)

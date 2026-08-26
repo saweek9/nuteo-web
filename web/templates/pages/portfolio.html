@@ -1,7 +1,7 @@
 {{template "header" .}}
 <section class="container section">
-  <h1>Portfolio</h1>
-  <p class="lede">Selected projects across cloud migration, observability, and platform engineering.</p>
+  <h1>{{t "portfolio.title" $.Lang}}</h1>
+  <p class="lede">{{t "portfolio.lede" $.Lang}}</p>
 
   <div class="grid grid-2">
     {{range .Projects}}

@@ -1,7 +1,7 @@
 {{template "header" .}}
 <section class="container section narrow">
-  <h1>404 — page not found</h1>
-  <p>The page you're looking for doesn't exist (or moved).</p>
-  <p><a href="/" class="btn btn-primary">Back to home</a></p>
+  <h1>{{t "errors.404_title" $.Lang}}</h1>
+  <p>{{t "errors.404_body" $.Lang}}</p>
+  <p><a href="/" class="btn btn-primary">{{t "errors.back_home" $.Lang}}</a></p>
 </section>
 {{template "footer" .}}

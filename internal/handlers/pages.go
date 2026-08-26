@@ -1,8 +1,11 @@
 package handlers
 
 import (
+	"fmt"
+	"html/template"
 	"net/http"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -79,6 +82,24 @@ func (d *Deps) NotFound(c *gin.Context) {
 // baseData fills the template vars common to every page.
 func baseData(c *gin.Context, d *Deps, title string) gin.H {
 	lang := i18nLang(c, d)
+
+	// Build lang-switcher HTML (EN | TH).
+	switchLang := func(code, label string) string {
+		cls := ""
+		if strings.EqualFold(lang, code) {
+			cls = ` class="active"`
+		}
+		titleAttr := label
+		if code == "en" {
+			titleAttr = "English"
+		} else {
+			titleAttr = "ภาษาไทย"
+		}
+		return fmt.Sprintf(`<a href="?lang=%s"%s title="%s">%s</a>`,
+			code, cls, titleAttr, strings.ToUpper(code))
+	}
+	langSwitchHTML := switchLang("en", "English") + switchLang("th", "ภาษาไทย")
+
 	return gin.H{
 		"SiteName":    d.Cfg.SiteName,
 		"SiteURL":     d.Cfg.SiteURL,
@@ -90,9 +111,10 @@ func baseData(c *gin.Context, d *Deps, title string) gin.H {
 		"TwitterURL":  "",
 		"Year":        time.Now().Year(),
 		// Translation helpers — call from templates as `{{t "nav.services" .Lang}}`
-		"Lang":    lang,
-		"t":       d.I18n.T,
-		"HasLang": d.I18n.Has,
+		"Lang":           lang,
+		"t":              d.I18n.T,
+		"HasLang":        d.I18n.Has,
+		"LangSwitchHTML": template.HTML(langSwitchHTML),
 	}
 }
 
@@ -108,9 +130,24 @@ func i18nLang(c *gin.Context, d *Deps) string {
 	if d.I18n == nil {
 		return "en"
 	}
-	// Explicit ?lang query param (cookie-backed for persistence)
+	return pickLang(c, d)
+}
+
+// pickLang is the shared language picker used by handlers and middleware.
+func pickLang(c *gin.Context, d *Deps) string {
 	if l := c.Query("lang"); l != "" {
 		return d.I18n.Negotiate(l, "")
 	}
 	return d.I18n.Negotiate("", c.GetHeader("Accept-Language"))
+}
+
+// adminErrorMessage returns a localized admin error string.
+// Falls back to English when i18n is not wired (during tests).
+func adminErrorMessage(lang string) string {
+	switch lang {
+	case "th":
+		return "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง"
+	default:
+		return "Invalid credentials."
+	}
 }

@@ -2,20 +2,20 @@
 <article>
   <header class="project-hero">
     <div class="container">
-      <a href="/portfolio" class="back">← All projects</a>
+      <a href="/portfolio" class="back">← {{t "common.all" $.Lang}} {{t "nav.portfolio" $.Lang}}</a>
       <h1>{{.Project.Title}}</h1>
       <p class="lede">{{.Project.Summary}}</p>
 
       <div class="project-meta">
         <span class="meta-item">
-          <strong>Industry:</strong> {{.Project.Industry}}
+          <strong>{{if eq .Lang "th"}}อุตสาหกรรม{{else}}Industry{{end}}:</strong> {{.Project.Industry}}
         </span>
         <span class="meta-item">
-          <strong>Year:</strong> {{.Project.Year}}
+          <strong>{{if eq .Lang "th"}}ปี{{else}}Year{{end}}:</strong> {{.Project.Year}}
         </span>
         {{if .Project.Client}}
         <span class="meta-item">
-          <strong>Client:</strong> {{.Project.Client}}
+          <strong>{{t "portfolio.client" $.Lang}}:</strong> {{.Project.Client}}
         </span>
         {{end}}
       </div>

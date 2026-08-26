@@ -1,7 +1,7 @@
 {{template "header" .}}
 <section class="container section narrow">
-  <h1>Contact</h1>
-  <p class="lede">Tell us about your project. We reply within 1 business day.</p>
+  <h1>{{t "contact.title" $.Lang}}</h1>
+  <p class="lede">{{t "contact.lede" $.Lang}}</p>
 
   {{if .Error}}
   <div class="alert error" role="alert">
@@ -15,12 +15,12 @@
 
     <div class="form-row">
       <div>
-        <label for="name">Name <span class="required">*</span></label>
+        <label for="name">{{t "contact.name" $.Lang}} <span class="required">*</span></label>
         <input id="name" type="text" name="name" required minlength="2" maxlength="100"
                value="{{.Name}}" autocomplete="name">
       </div>
       <div>
-        <label for="email">Email <span class="required">*</span></label>
+        <label for="email">{{t "contact.email" $.Lang}} <span class="required">*</span></label>
         <input id="email" type="email" name="email" required
                value="{{.Email}}" autocomplete="email">
       </div>
@@ -28,25 +28,25 @@
 
     <div class="form-row">
       <div>
-        <label for="company">Company</label>
+        <label for="company">{{t "contact.company" $.Lang}}</label>
         <input id="company" type="text" name="company" maxlength="200"
                value="{{.Company}}" autocomplete="organization">
       </div>
       <div>
-        <label for="topic">Topic <span class="required">*</span></label>
+        <label for="topic">{{t "contact.topic" $.Lang}} <span class="required">*</span></label>
         <select id="topic" name="topic" required>
-          <option value="">— choose —</option>
-          <option value="cloud-migration"{{if eq .Topic "cloud-migration"}} selected{{end}}>Cloud migration</option>
-          <option value="devops"{{if eq .Topic "devops"}} selected{{end}}>DevOps &amp; SRE</option>
-          <option value="backend"{{if eq .Topic "backend"}} selected{{end}}>Backend / API</option>
-          <option value="security"{{if eq .Topic "security"}} selected{{end}}>Security &amp; compliance</option>
-          <option value="intro"{{if eq .Topic "intro"}} selected{{end}}>Just exploring</option>
+          <option value="">{{t "contact.topic_choose" $.Lang}}</option>
+          <option value="cloud-migration"{{if eq .Topic "cloud-migration"}} selected{{end}}>{{t "contact.topic_cloud" $.Lang}}</option>
+          <option value="devops"{{if eq .Topic "devops"}} selected{{end}}>{{t "contact.topic_devops" $.Lang}}</option>
+          <option value="backend"{{if eq .Topic "backend"}} selected{{end}}>{{t "contact.topic_backend" $.Lang}}</option>
+          <option value="security"{{if eq .Topic "security"}} selected{{end}}>{{t "contact.topic_security" $.Lang}}</option>
+          <option value="intro"{{if eq .Topic "intro"}} selected{{end}}>{{t "contact.topic_exploring" $.Lang}}</option>
         </select>
       </div>
     </div>
 
     <div>
-      <label for="message">Message <span class="required">*</span></label>
+      <label for="message">{{t "contact.message" $.Lang}} <span class="required">*</span></label>
       <textarea id="message" name="message" required minlength="10" maxlength="5000">{{.Message}}</textarea>
     </div>
 
@@ -58,16 +58,16 @@
 
     <label class="checkbox">
       <input type="checkbox" name="consent" required{{if .Consent}} checked{{end}}>
-      <span>I agree to nuteo solution storing this message and replying via email. See our privacy notice.</span>
+      <span>{{t "contact.consent" $.Lang}}</span>
     </label>
 
     <div>
-      <button type="submit" class="btn btn-primary">Send message</button>
+      <button type="submit" class="btn btn-primary">{{t "contact.submit" $.Lang}}</button>
     </div>
   </form>
 
   <p style="margin-top: var(--space-6); color: var(--fg-muted); font-size: 0.875rem;">
-    Or email directly: <a href="mailto:{{.ContactEmail}}">{{.ContactEmail}}</a>
+    {{t "contact.or_email" $.Lang}} <a href="mailto:{{.ContactEmail}}">{{.ContactEmail}}</a>
   </p>
 </section>
 {{template "footer" .}}
