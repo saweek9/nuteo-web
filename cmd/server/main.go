@@ -104,6 +104,11 @@ func main() {
 	})
 	r.GET("/sitemap.xml", sitemapHandler(cfg, store))
 	r.GET("/rss.xml",     rssHandler(cfg, store))
+	r.GET("/sw.js", func(c *gin.Context) {
+		c.Header("Service-Worker-Allowed", "/")
+		c.Header("Cache-Control", "public, max-age=300")
+		c.File(filepath.Join(staticDir, "js", "sw.js"))
+	})
 
 	// Pages — setPage middleware tags the template per route. The POST handler
 	// overrides the page tag at runtime when rendering the thanks page.

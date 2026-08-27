@@ -10,6 +10,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/nuteo/nuteo-web/internal/models"
 	"github.com/nuteo/nuteo-web/internal/storage"
 )
 
@@ -186,6 +187,22 @@ func commonPrefixLen(a, b string) int {
 func baseData(c *gin.Context, d *Deps, title string) gin.H {
 	lang := i18nLang(c, d)
 
+	// Resolve OG / Twitter defaults.
+	ogImage := d.Cfg.SiteURL + d.Cfg.LogoPath
+	ogType := "website"
+	articleDate := ""
+	if d.Store != nil && len(c.Request.URL.Path) > 6 && c.Request.URL.Path[:6] == "/blog/" {
+		if p := findPostByPath(d.Store, c.Request.URL.Path); p != nil {
+			ogType = "article"
+			articleDate = p.PublishedAt.Format("2006-01-02")
+		}
+	}
+	// Twitter handle — strip leading "@" if present.
+	twHandle := d.Cfg.TwitterHandle
+	if strings.HasPrefix(twHandle, "@") {
+		twHandle = twHandle[1:]
+	}
+
 	// Build lang-switcher HTML (EN | TH).
 	switchLang := func(code, label string) string {
 		cls := ""
@@ -198,28 +215,45 @@ func baseData(c *gin.Context, d *Deps, title string) gin.H {
 		} else {
 			titleAttr = "ภาษาไทย"
 		}
-		return fmt.Sprintf(`<a href="?lang=%s"%s title="%s">%s</a>`,
-			code, cls, titleAttr, strings.ToUpper(code))
+		return fmt.Sprintf(`<a href="?lang=%s" rel="alternate" hreflang="%s"%s title="%s">%s</a>`,
+			code, code, cls, titleAttr, strings.ToUpper(code))
 	}
 	langSwitchHTML := switchLang("en", "English") + switchLang("th", "ภาษาไทย")
 
 	return gin.H{
-		"SiteName":    d.Cfg.SiteName,
-		"SiteURL":     d.Cfg.SiteURL,
-		"PageTitle":   title,
-		"PageURL":     c.Request.URL.Path,
-		"LogoPath":    d.Cfg.LogoPath,
-		"GitHubURL":   d.Cfg.GitHubURL,
-		"LinkedInURL": d.Cfg.LinkedInURL,
-		"TwitterURL":  "",
-		"Year":        time.Now().Year(),
+		"SiteName":      d.Cfg.SiteName,
+		"SiteURL":       d.Cfg.SiteURL,
+		"PageTitle":     title,
+		"PageDescription": "Software engineering & IT consulting from Bangkok.",
+		"PageURL":       c.Request.URL.Path,
+		"LogoPath":      d.Cfg.LogoPath,
+		"GitHubURL":     d.Cfg.GitHubURL,
+		"LinkedInURL":   d.Cfg.LinkedInURL,
+		"TwitterURL":    "",
+		"TwitterHandle": twHandle,
+		"Year":          time.Now().Year(),
 		// Translation helpers — call from templates as `{{t "nav.services" .Lang}}`
 		"Lang":           lang,
 		"t":              d.I18n.T,
 		"HasLang":        d.I18n.Has,
 		"LangSwitchHTML": template.HTML(langSwitchHTML),
+		// Open Graph / Twitter
+		"OGType":      ogType,
+		"OGImage":     ogImage,
+		"ArticleDate": articleDate,
 	}
 }
+
+// findPostByPath returns the post at /blog/<slug> or nil.
+func findPostByPath(store *storage.Store, urlPath string) *models.Post {
+	for i := range store.Posts {
+		if urlPath == "/blog/"+store.Posts[i].Slug {
+			return &store.Posts[i]
+		}
+	}
+	return nil
+}
+
 
 // ContentImagePath returns the relative path for serving /static/images/<name>.
 // Used in markdown image links.

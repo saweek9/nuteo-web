@@ -27,6 +27,19 @@
   }
   initReveal();
 
+  // ===== Service Worker =====
+  // Register /sw.js so the browser can claim it as a service worker.
+  // We only register on pages (not on /sw.js itself) and skip when
+  // unsupported (very old browsers).
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    // Don't register from /sw.js (would cause infinite reload).
+    if (!location.pathname.endsWith('/sw.js')) {
+      navigator.serviceWorker.register('/sw.js').catch(function (err) {
+        console.warn('[nuteo] SW registration failed:', err);
+      });
+    }
+  }
+
   // ===== Theme toggle (light / dark / system) =====
   const THEME_KEY = 'nuteo-theme';
   const themeBtn = document.querySelector('.theme-toggle');

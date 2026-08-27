@@ -659,7 +659,7 @@ main:focus { outline: none; } /* skip-link target */
 }
 
 .card .meta {
-  color: var(--fg-subtle);
+  color: var(--fg-muted);  /* AA contrast (≥ 4.5:1) at 0.875rem */
   font-size: 0.875rem;
   margin-bottom: var(--space-2);
 }

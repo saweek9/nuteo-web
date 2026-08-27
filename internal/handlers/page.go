@@ -23,6 +23,7 @@ var partialFiles = []string{
 	"search_results.html",
 	"404_illustration.svg.html",
 	"cookie_banner.html",
+	"og_meta.html",
 }
 
 // pageFiles lists every page template.

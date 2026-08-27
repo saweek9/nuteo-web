@@ -9,10 +9,13 @@
     * Choice is sticky (localStorage). On decline, no analytics/3rd-party
       scripts will be loaded by subsequent code.
 
+  Note: <div role="dialog"> not <aside role="dialog"> — <aside> doesn't
+  allow the dialog role per WAI-ARIA, which breaks aria-allowed-role.
+
   CSS: .cookie-banner (below).
 */}}
-<aside id="cookie-banner" class="cookie-banner" role="dialog"
-       aria-live="polite" aria-labelledby="cookie-title" hidden>
+<div id="cookie-banner" class="cookie-banner" role="dialog"
+     aria-live="polite" aria-labelledby="cookie-title" hidden>
   <div class="cookie-banner-content">
     <div class="cookie-banner-text">
       <h3 id="cookie-title" class="cookie-banner-title">
@@ -34,6 +37,6 @@
       </button>
     </div>
   </div>
-</aside>
+</div>
 <script src="/static/js/cookie-banner.js" defer></script>
 {{end}}

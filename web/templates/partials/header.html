@@ -18,13 +18,17 @@
   {{/* Logo is the only above-the-fold image on every page. */}}
   <link rel="preload" href="{{.LogoPath}}" as="image">
 
+  {{/* Open Graph + Twitter Cards + JSON-LD */}}
+  {{template "og_meta" .}}
+
   <title>{{.PageTitle}} · {{.SiteName}}</title>
 </head>
 <body>
   <header class="site-header">
     <div class="container">
       <a class="brand" href="/">
-        <img src="{{.LogoPath}}" alt="{{.SiteName}} logo" width="32" height="32">
+        <img src="{{.LogoPath}}" alt="{{.SiteName}} logo" width="32" height="32"
+             decoding="async" fetchpriority="high">
         <span>{{.SiteName}}</span>
       </a>
 
