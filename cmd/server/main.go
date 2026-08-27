@@ -87,7 +87,8 @@ func main() {
 
 	// Static
 	staticDir, _ := filepath.Abs(cfg.StaticDir)
-	r.Static("/static", staticDir)
+	// Static assets: served via staticCache() handler below.
+	// Long max-age + immutable for cache-first delivery.
 
 	// Serve pre-compressed (.gz) variants for text assets when the client
 	// advertises gzip support. Spring-Framework style "OnDiskCompressed".
@@ -109,6 +110,10 @@ func main() {
 		c.Header("Cache-Control", "public, max-age=300")
 		c.File(filepath.Join(staticDir, "js", "sw.js"))
 	})
+
+	// Static assets: 1-year cache. Content doesn't change without
+	// a deploy, and the service worker validates on demand.
+	r.GET("/static/*filepath", staticCache(staticDir))
 
 	// Pages — setPage middleware tags the template per route. The POST handler
 	// overrides the page tag at runtime when rendering the thanks page.
