@@ -47,10 +47,11 @@ contact:
 blog:
   title: บทความ
   lede: "บทความทางวิศวกรรม, post-mortem, และบันทึกจากทีม"
+  back: "บทความทั้งหมด"
+  all_posts: "กลับไปบทความทั้งหมด"
   no_posts: ยังไม่มีบทความ กลับมาดูใหม่ภายหลัง
   published: เผยแพร่
   by: โดย
-  back: "← บทความทั้งหมด"
 
 portfolio:
   title: ผลงาน

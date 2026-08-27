@@ -1,7 +1,31 @@
-/* Theme toggle + mobile menu + FAQ accordion JS */
+// Theme toggle + mobile menu + FAQ accordion + scroll-reveal animations.
 
 (function () {
   'use strict';
+
+  // ===== Scroll-reveal animations =====
+  // Uses IntersectionObserver to add `.in-view` class to elements with
+  // `[data-reveal]` when they enter the viewport, triggering the
+  // CSS animation defined in site.css. Honors `prefers-reduced-motion`.
+  function initReveal() {
+    var els = document.querySelectorAll('[data-reveal]');
+    if (!els.length) return;
+    var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced || !('IntersectionObserver' in window)) {
+      els.forEach(function (e) { e.classList.add('in-view'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    els.forEach(function (el) { io.observe(el); });
+  }
+  initReveal();
 
   // ===== Theme toggle (light / dark / system) =====
   const THEME_KEY = 'nuteo-theme';
@@ -11,79 +35,104 @@
   function applyTheme(theme) {
     // theme: 'light' | 'dark' | 'system'
     if (theme === 'system') {
-      root.removeAttribute('data-theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
     } else {
       root.setAttribute('data-theme', theme);
     }
-    if (themeBtn) {
-      themeBtn.setAttribute('aria-label',
-        theme === 'light' ? 'Switch to dark mode'
-        : theme === 'dark' ? 'Switch to system mode'
-        : 'Switch to light mode');
-      themeBtn.setAttribute('title', themeBtn.getAttribute('aria-label'));
-    }
   }
 
+  // Read saved choice, fall back to 'system'
   let savedTheme;
-  try { savedTheme = localStorage.getItem(THEME_KEY) || 'system'; }
-  catch (e) { savedTheme = 'system'; }
+  try {
+    savedTheme = localStorage.getItem(THEME_KEY) || 'system';
+  } catch (e) {
+    savedTheme = 'system';
+  }
   applyTheme(savedTheme);
 
   if (themeBtn) {
-    themeBtn.addEventListener('click', () => {
-      const current = root.getAttribute('data-theme') ||
-        (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      const next = current === 'light' ? 'dark'
-                 : current === 'dark' ? 'system'
-                 : 'light';
-      try { localStorage.setItem(THEME_KEY, next); } catch (e) { /* ignore */ }
-      applyTheme(next);
+    themeBtn.addEventListener('click', function () {
+      // Cycle: system → light → dark → system
+      const cur = root.getAttribute('data-theme');
+      let next;
+      if (savedTheme === 'system') next = 'light';
+      else if (savedTheme === 'light') next = 'dark';
+      else next = 'system';
+
+      // Toggle the actual data-theme immediately so the UI feels snappy.
+      applyTheme(next === 'system'
+        ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        : next);
+
+      savedTheme = next;
+      try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
     });
   }
 
-  // ===== Mobile menu toggle =====
-  const menuBtn = document.querySelector('.mobile-menu-btn');
-  const nav = document.querySelector('.site-nav');
-  if (menuBtn && nav) {
-    menuBtn.addEventListener('click', () => {
-      const isOpen = nav.classList.toggle('is-open');
-      menuBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  // ===== Mobile menu =====
+  const mobileBtn = document.querySelector('.mobile-menu-btn');
+  const siteNav = document.getElementById('primary-nav');
+  if (mobileBtn && siteNav) {
+    mobileBtn.setAttribute('aria-expanded', 'false');
+    mobileBtn.setAttribute('aria-controls', 'primary-nav');
+    mobileBtn.setAttribute('aria-label', 'Open menu');
+
+    function closeMenu() {
+      siteNav.classList.remove('is-open');
+      mobileBtn.setAttribute('aria-expanded', 'false');
+      mobileBtn.setAttribute('aria-label', 'Open menu');
+    }
+    function openMenu() {
+      siteNav.classList.add('is-open');
+      mobileBtn.setAttribute('aria-expanded', 'true');
+      mobileBtn.setAttribute('aria-label', 'Close menu');
+    }
+
+    mobileBtn.addEventListener('click', function () {
+      if (siteNav.classList.contains('is-open')) closeMenu();
+      else openMenu();
     });
     // Close on link click
-    nav.addEventListener('click', (e) => {
-      if (e.target.tagName === 'A' && nav.classList.contains('is-open')) {
-        nav.classList.remove('is-open');
-        menuBtn.setAttribute('aria-expanded', 'false');
+    siteNav.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', closeMenu);
+    });
+    // Close on Escape key (a11y)
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && siteNav.classList.contains('is-open')) {
+        closeMenu();
+        mobileBtn.focus();
+      }
+    });
+    // Close when window resized past mobile breakpoint
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 1000 && siteNav.classList.contains('is-open')) {
+        closeMenu();
       }
     });
   }
 
-  // ===== Fade-up animation on scroll =====
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('fade-up');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-    document.querySelectorAll('[data-animate]').forEach((el) => observer.observe(el));
-  }
-
-  // ===== Newsletter form (placeholder — real impl in Phase 3) =====
-  const newsletterForm = document.querySelector('.newsletter-form');
-  if (newsletterForm) {
-    newsletterForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = newsletterForm.querySelector('input[type="email"]').value;
-      // Demo: just show success
-      const msg = document.createElement('div');
-      msg.className = 'alert success';
-      msg.style.marginTop = '1rem';
-      msg.textContent = `Thanks! Confirmation sent to ${email}.`;
-      newsletterForm.replaceWith(msg);
+  // ===== Newsletter form: progressive enhancement for HTMX =====
+  // HTMX fires hx:configRequest and hx:afterRequest events. We add
+  // a `class="sending"` during submit so CSS can dim the form, and
+  // toggle the loading skeleton on.
+  document.querySelectorAll('.newsletter-form').forEach(function (f) {
+    var pending = document.querySelector('.newsletter-pending');
+    f.addEventListener('htmx:beforeRequest', function () {
+      f.classList.add('is-sending');
+      var btn = f.querySelector('button[type="submit"]');
+      if (btn) btn.disabled = true;
+      if (pending) {
+        pending.hidden = false;
+        pending.textContent = '\u00a0'; // nbsp so shimmer has height
+      }
     });
-  }
+    f.addEventListener('htmx:afterRequest', function () {
+      f.classList.remove('is-sending');
+      var btn = f.querySelector('button[type="submit"]');
+      if (btn) btn.disabled = false;
+      if (pending) pending.hidden = true;
+    });
+  });
+
 })();

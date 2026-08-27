@@ -30,11 +30,12 @@
       </button>
 
       <nav id="primary-nav" class="site-nav" aria-label="Primary">
-        <a href="/services"{{if eq .PageURL "/services"}} class="active"{{end}}>{{t "nav.services" $.Lang}}</a>
-        <a href="/portfolio"{{if eq .PageURL "/portfolio"}} class="active"{{end}}>{{t "nav.portfolio" $.Lang}}</a>
-        <a href="/blog"{{if hasPrefix .PageURL "/blog"}} class="active"{{end}}>{{t "nav.blog" $.Lang}}</a>
-        <a href="/about"{{if eq .PageURL "/about"}} class="active"{{end}}>{{t "nav.about" $.Lang}}</a>
-        <a href="/faq"{{if eq .PageURL "/faq"}} class="active"{{end}}>{{t "nav.faq" $.Lang}}</a>
+        <a href="/services"{{if eq .PageURL "/services"}} class="active" aria-current="page"{{end}}>{{t "nav.services" $.Lang}}</a>
+        <a href="/portfolio"{{if eq .PageURL "/portfolio"}} class="active" aria-current="page"{{end}}>{{t "nav.portfolio" $.Lang}}</a>
+        <a href="/blog"{{if hasPrefix .PageURL "/blog"}} class="active" aria-current="page"{{end}}>{{t "nav.blog" $.Lang}}</a>
+        <a href="/about"{{if eq .PageURL "/about"}} class="active" aria-current="page"{{end}}>{{t "nav.about" $.Lang}}</a>
+        <a href="/faq"{{if eq .PageURL "/faq"}} class="active" aria-current="page"{{end}}>{{t "nav.faq" $.Lang}}</a>
+
 
         <form class="search-mini" role="search" action="/search" method="get">
           <label for="search-q" class="sr-only">Search</label>
@@ -43,11 +44,11 @@
                  hx-target="#search-results" hx-swap="innerHTML" hx-push-url="true">
         </form>
 
-        <div class="lang-switch" aria-label="Language">
+        <div class="lang-switch" aria-label="Language toggle" role="group">
           {{.LangSwitchHTML}}
         </div>
 
-        <a href="/contact" class="btn btn-primary{{if eq .PageURL "/contact"}} active{{end}}">{{t "nav.contact" $.Lang}}</a>
+        <a href="/contact" class="btn btn-primary{{if eq .PageURL "/contact"}} active{{end}}"{{if eq .PageURL "/contact"}} aria-current="page"{{end}}>{{t "nav.contact" $.Lang}}</a>
 
         <button class="theme-toggle" type="button"
                 aria-label="Toggle theme" title="Toggle theme">

@@ -102,6 +102,15 @@ func (d *Deps) loadTemplates() map[string]*template.Template {
 		return d.I18n.T(lang, key)
 	}
 
+	// Date formatters — wrap exported helpers so templates can call
+	// them with `{{FormatDate .Post.PublishedAt .Lang}}`.
+	funcs["FormatDate"] = func(t time.Time, lang string) string {
+		return FormatDate(t, lang)
+	}
+	funcs["RelativeDate"] = func(t time.Time, lang string) string {
+		return RelativeDate(t, lang)
+	}
+
 	for _, page := range pageFiles {
 		tmpl := template.New(page).Funcs(funcs)
 		// Clone-with-parts: parse partials into each set so the page

@@ -5,30 +5,27 @@
       <a href="/blog" class="back">← {{t "blog.back" $.Lang}}</a>
       <h1>{{.Post.Title}}</h1>
       <p class="lede">{{.Post.Summary}}</p>
-
-      <div class="project-meta">
-        <span class="meta-item">
-          <strong>{{t "blog.published" $.Lang}}:</strong> {{.Post.PublishedAt.Format "January 2, 2006"}}
-        </span>
-        {{if .Post.Author}}
-        <span class="meta-item">
-          <strong>{{t "blog.by" $.Lang}}:</strong> {{.Post.Author}}
-        </span>
-        {{end}}
+      <div class="post-meta">
+        <time datetime="{{.Post.PublishedAt.Format "2006-01-02"}}" class="post-date">
+          {{FormatDate .Post.PublishedAt $.Lang}}
+        </time>
+        <span class="post-rel">· {{RelativeDate .Post.PublishedAt $.Lang}}</span>
+        {{if .Post.Author}}<span class="post-author">· {{.Post.Author}}</span>{{end}}
       </div>
-
       {{if .Post.Tags}}
-      <div class="tags" style="margin-top: var(--space-4);">
-        {{range .Post.Tags}}<a href="/blog/tag/{{.}}" class="tag tag-accent">{{.}}</a>{{end}}
+      <div class="post-tags">
+        {{range .Post.Tags}}<a href="/blog/tag/{{.}}" class="tag">{{.}}</a>{{end}}
       </div>
       {{end}}
     </div>
   </header>
 
-  <div class="container section detail">
-    <div class="body">
-      {{safeHTML .Post.BodyHTML}}
-    </div>
+  <div class="container section narrow">
+    <div class="post-body">{{safeHTML .Post.BodyHTML}}</div>
+
+    <p style="margin-top: var(--space-8);">
+      <a href="/blog" class="btn btn-secondary">← {{t "blog.all_posts" $.Lang}}</a>
+    </p>
   </div>
 </article>
 {{template "footer" .}}

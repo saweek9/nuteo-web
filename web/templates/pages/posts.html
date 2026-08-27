@@ -4,24 +4,29 @@
   <p class="lede">{{t "blog.lede" $.Lang}}</p>
 
   {{if .Posts}}
-  <div class="grid grid-2" style="margin-top: var(--space-8);">
+  <div class="grid grid-2" style="margin-top: var(--space-6);">
     {{range .Posts}}
-    <a href="/blog/{{.Slug}}" class="card" data-animate>
-      <p class="meta">{{.PublishedAt.Format "January 2, 2006"}}{{if .Author}} · {{.Author}}{{end}}</p>
-      <h3>{{.Title}}</h3>
-      <p>{{.Summary}}</p>
+    <article class="card post-card">
+      <div class="post-meta">
+        <time datetime="{{.PublishedAt.Format "2006-01-02"}}" class="post-date">
+          {{FormatDate .PublishedAt $.Lang}}
+        </time>
+        <span class="post-rel">{{RelativeDate .PublishedAt $.Lang}}</span>
+      </div>
+      <h2 class="post-title">
+        <a href="/blog/{{.Slug}}">{{.Title}}</a>
+      </h2>
+      <p class="post-summary">{{.Summary}}</p>
       {{if .Tags}}
-      <div class="tags" style="margin-top: var(--space-3);">
-        {{range .Tags}}<a href="/blog/tag/{{.}}" class="tag">{{.}}</a>{{end}}
+      <div class="post-tags">
+        {{range .Tags}}<span class="tag">{{.}}</span>{{end}}
       </div>
       {{end}}
-    </a>
+    </article>
     {{end}}
   </div>
   {{else}}
-  <div style="text-align: center; padding: var(--space-12) 0; color: var(--fg-muted);">
-    <p>{{t "blog.no_posts" $.Lang}}</p>
-  </div>
+  <p class="empty-state">{{t "blog.empty" $.Lang}}</p>
   {{end}}
 </section>
 {{template "footer" .}}

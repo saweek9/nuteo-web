@@ -15,7 +15,9 @@
         {{t "footer.newsletter_submit" .Lang}}
       </button>
     </form>
-    <div id="newsletter-msg" class="newsletter-msg"></div>
+    <div id="newsletter-msg" class="newsletter-msg" aria-live="polite">
+      <span class="newsletter-pending skeleton skeleton-line medium" hidden></span>
+    </div>
   </section>
 
   <footer class="site-footer">

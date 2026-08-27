@@ -52,8 +52,9 @@
 
     {{/* Honeypot — hidden from humans; bots fill it */}}
     <div class="honeypot" aria-hidden="true">
-      <label for="website">Website (leave blank)</label>
-      <input id="website" type="text" name="website" tabindex="-1" autocomplete="off">
+      <label for="website" aria-hidden="true">Website (leave blank)</label>
+      <input id="website" type="text" name="website" tabindex="-1" autocomplete="off"
+             aria-hidden="true" style="position: absolute; left: -9999px;">
     </div>
 
     <label class="checkbox">

@@ -48,10 +48,11 @@ contact:
 blog:
   title: Blog
   lede: "Engineering articles, post-mortems, and notes from the team."
+  back: "All posts"
+  all_posts: "Back to all posts"
   no_posts: No posts yet. Check back soon.
   published: Published
   by: By
-  back: "← All posts"
 
 portfolio:
   title: Portfolio
