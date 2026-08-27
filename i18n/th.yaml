@@ -67,6 +67,29 @@ faq:
   title: คำถามที่พบบ่อย
   lede: "คำถามทั่วไปเกี่ยวกับการทำงานกับ nuteo solution ไม่เจอคำตอบที่ต้องการ?"
   ask_directly: ถามเราโดยตรง
+  contact_label: ส่งข้อความถึงเรา
+  contact_link: /contact
+  fallback_q: "nuteo ทำอะไร?"
+  fallback_a: "เราสร้างและดูแลระบบที่ใช้งานจริง ติดต่อเราได้เลย"
+  entries:
+    - q: "โปรเจกต์ทั่วไปใช้เวลานานแค่ไหน?"
+      a: "ส่วนใหญ่ใช้เวลา 6–12 สัปดาห์ โดยมี senior engineer 1–2 คนฝังตัวอยู่กับทีมคุณ เรากำหนดขอบเขตจากผลลัพธ์ที่จับต้องได้ เช่น migrate platform, ทำ CI/CD pipeline, หรือทำ incident review แล้วส่งมอบทุกอย่างที่สร้าง retainer ระยะยาว (1–2 วัน/สัปดาห์) ก็เป็นที่นิยมสำหรับงาน platform ต่อเนื่อง"
+    - q: "ทำงานแบบ remote ได้ไหม?"
+      a: "ได้ งานส่วนใหญ่เป็น async-first โดยมีเวลาทำงานซ้อนกัน เรามีเวลาที่ overlap กับทีม APAC และ EU อย่างชัดเจน สำหรับลูกค้าในกรุงเทพ เรายินดีไป onsite 1–2 วันต่อสัปดาห์"
+    - q: "เชี่ยวชาญ tech stack อะไรบ้าง?"
+      a: "Backend: <strong>Go, Python, TypeScript/Node</strong>. Infrastructure: <strong>Kubernetes, Terraform, AWS/GCP</strong>. Observability: <strong>OpenTelemetry, Prometheus, Grafana</strong>. CI/CD: <strong>GitHub Actions, ArgoCD, Buildkite</strong>. เรายินดีเรียนรู้ stack ของคุณ แต่ leverage ส่วนใหญ่ของเราอยู่ที่ stack เหล่านี้"
+    - q: "ช่วยจัดการ incident ที่กำลังเกิดขึ้นได้ไหม?"
+      a: "ได้ เรามี retainer สำหรับ incident response ทีมจะเข้าไปทำงานร่วมกับ on-call ของคุณภายใน 2 ชั่วโมงเมื่อเกิด P0/P1 และทำ post-mortem เมื่อเหตุการณ์สงบลง"
+    - q: "รับ equity ไหม?"
+      a: "ในบางกรณี สำหรับทีม early stage จริงๆ ปกติคิดเป็นเงินสด เราไม่ทำ revenue-share หรือคิดรายชั่วโมง"
+    - q: "กระบวนการ discovery เป็นอย่างไร?"
+      a: "ส่วนใหญ่เริ่มด้วย discovery 2 สัปดาห์: ตรวจสภาพปัจจุบัน target architecture TCO model และข้อเสนอแนะแบบเขียน โทรครั้งแรกไม่คิดค่าใช้จ่าย"
+    - q: "เซ็น NDA ได้ไหม?"
+      a: "ได้ NDA แบบ mutual ก่อนโทร discovery เราจะไม่เซ็นสละสิทธิ์หรือ IP โดยไม่คุยกันก่อน"
+    - q: "ส่งมอบงานอย่างไร?"
+      a: "ทุกโปรเจกต์จบด้วยการส่งมอบแบบเขียน: architecture decision records, runbooks, recorded walkthroughs และช่วง support 30 วันหลังส่งมอบ"
+    - q: "มี ongoing support ไหม?"
+      a: "มี ลูกค้าส่วนใหญ่เปลี่ยนเป็น managed-operations retainer หลังจากช่วง build เรายังรับ on-call rotations แบบต่อทีมด้วย"
 
 search:
   title: ค้นหา
@@ -89,6 +112,7 @@ footer:
   sitemap: Sitemap
   rss: RSS feed
   copyright: "สงวนลิขสิทธิ์"
+  built_with: "สร้างด้วย"
 
 errors:
   404_title: "404 — ไม่พบหน้านี้"

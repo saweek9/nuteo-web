@@ -13,6 +13,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"gopkg.in/yaml.v3"
 )
@@ -21,6 +22,7 @@ import (
 type Bundle struct {
 	dir     string
 	locales map[string]map[string]any // lang → nested map
+	mu      sync.RWMutex             // protects locales
 }
 
 // NewBundle loads every *.yaml file under dir. Each filename stem
@@ -92,6 +94,17 @@ func (b *Bundle) T(lang, key string) string {
 // language and key.
 func (b *Bundle) Has(lang, key string) bool {
 	return lookup(b.locales[lang], key) != ""
+}
+
+// RawMap returns the underlying parsed YAML tree for a locale so that
+// callers (e.g. the FAQ handler) can walk structured data like
+// `faq.entries: [{q, a}, ...]` without needing a custom decoder.
+//
+// Returns nil if the locale is unknown.
+func (b *Bundle) RawMap(lang string) map[string]any {
+	b.mu.RLock()
+	defer b.mu.RUnlock()
+	return b.locales[lang]
 }
 
 // lookup walks the nested map by dot-separated key.

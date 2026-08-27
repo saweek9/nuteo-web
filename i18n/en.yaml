@@ -68,6 +68,29 @@ faq:
   title: Frequently asked questions
   lede: "Common questions about working with nuteo solution. Don't see yours?"
   ask_directly: Ask us directly
+  contact_label: Send us a message
+  contact_link: /contact
+  fallback_q: "What does nuteo do?"
+  fallback_a: "We build and operate production systems. Drop us a line and we'll tell you more."
+  entries:
+    - q: "What's your typical engagement size?"
+      a: "Most projects run 6–12 weeks with 1–2 senior engineers embedded in your team. We scope to a concrete outcome — a migrated platform, a working CI/CD pipeline, an incident review — and hand off everything we build. Longer retainers (1–2 days/week) are common for ongoing platform work."
+    - q: "Do you work remotely?"
+      a: "Yes. Most of our work is async-first with overlapping working hours. We have a few hours of guaranteed overlap with APAC and EU teams. For Bangkok-based clients, we're happy to be on-site 1–2 days per week."
+    - q: "What tech stacks do you specialize in?"
+      a: "Backend: <strong>Go, Python, TypeScript/Node</strong>. Infrastructure: <strong>Kubernetes, Terraform, AWS/GCP</strong>. Observability: <strong>OpenTelemetry, Prometheus, Grafana</strong>. CI/CD: <strong>GitHub Actions, ArgoCD, Buildkite</strong>. We're happy to learn your stack — but most of our leverage is in those areas."
+    - q: "Can you help with an in-flight incident?"
+      a: "Yes — we offer incident-response retainers. We'll embed with your on-call team within 2 hours of an active P0/P1 and work the issue alongside you, then run the post-mortem when the dust settles."
+    - q: "Do you take equity?"
+      a: "Occasionally, for very early-stage teams. Default is cash. We don't do revenue-share or per-hour billing."
+    - q: "What's your discovery process like?"
+      a: "Most engagements start with a 2-week discovery: current-state audit, target architecture, TCO model, and a written recommendation. No charge for the first call."
+    - q: "Do you sign NDAs?"
+      a: "Yes, mutual NDA before the discovery call. We won't sign away liability or IP rights without a conversation."
+    - q: "How do you handle handover?"
+      a: "Every engagement ends with a written handover: architecture decision records, runbooks, recorded walkthroughs, and a 30-day post-handover support window."
+    - q: "Do you provide ongoing support?"
+      a: "Yes — most clients move into a managed-operations retainer after the build phase. We also run on-call rotations on a per-team basis."
 
 search:
   title: Search
@@ -90,6 +113,7 @@ footer:
   sitemap: Sitemap
   rss: RSS feed
   copyright: "All rights reserved."
+  built_with: "Built with"
 
 errors:
   404_title: "404 — page not found"

@@ -3,23 +3,23 @@
   <h1>{{t "faq.title" $.Lang}}</h1>
   <p class="lede">
     {{t "faq.lede" $.Lang}}
-    <a href="/contact">{{if eq .Lang "th"}}ส่งข้อความหาเรา{{else}}Drop us a line{{end}}</a>.
+    <a href="{{or .FAQContactLink "/contact"}}">{{.ContactLabel}}</a>.
   </p>
 
   <div class="faq-list">
-    {{range .FAQs}}
+    {{range .FAQEntries}}
     <details class="faq-item">
-      <summary>{{.Question}}</summary>
-      <div class="answer">
-        <p>{{safeHTML .Answer}}</p>
-      </div>
+      <summary>
+        <span class="faq-q">{{.Question}}</span>
+        <span class="faq-icon" aria-hidden="true"></span>
+      </summary>
+      <div class="faq-a">{{safeHTML .Answer}}</div>
     </details>
     {{end}}
   </div>
 
-  <p style="margin-top: var(--space-8); text-align: center;">
-    {{if eq .Lang "th"}}ยังมีคำถามอยู่?{{else}}Still have questions?{{end}}
-    <a href="/contact" class="btn btn-primary">{{t "faq.ask_directly" $.Lang}} →</a>
+  <p class="faq-cta">
+    <a href="/contact" class="btn btn-primary">{{t "faq.ask_directly" $.Lang}}</a>
   </p>
 </section>
 {{template "footer" .}}
