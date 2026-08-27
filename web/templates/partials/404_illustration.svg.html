@@ -1,0 +1,44 @@
+{{define "404_illustration"}}
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240"
+     fill="none" aria-hidden="true" role="img">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--accent-soft)" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="var(--bg)" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Soft background glow -->
+  <ellipse cx="200" cy="200" rx="180" ry="40" fill="url(#bg)"/>
+
+  <!-- Big "404" with one digit askew -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+     font-weight="700" text-anchor="middle">
+    <text x="140" y="170" font-size="120" fill="var(--accent)" opacity="0.95">4</text>
+    <text x="200" y="155" font-size="120" fill="var(--fg)" transform="rotate(-12 200 155)">0</text>
+    <text x="260" y="170" font-size="120" fill="var(--accent)" opacity="0.95">4</text>
+  </g>
+
+  <!-- Floating code symbols (subtle, scattered) -->
+  <g fill="var(--fg-subtle)" opacity="0.45" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <text x="40" y="50" font-size="20">&lt;/&gt;</text>
+    <text x="340" y="80" font-size="16">{ }</text>
+    <text x="60" y="200" font-size="14">404</text>
+    <text x="320" y="220" font-size="14">#</text>
+  </g>
+
+  <!-- Magnifying glass (lost page) -->
+  <g stroke="var(--accent)" stroke-width="3" fill="none" stroke-linecap="round">
+    <circle cx="320" cy="60" r="14"/>
+    <line x1="330" y1="70" x2="340" y2="80"/>
+  </g>
+
+  <!-- Question mark in a circle -->
+  <g transform="translate(70, 100)">
+    <circle cx="0" cy="0" r="16" fill="var(--bg)" stroke="var(--border)" stroke-width="2"/>
+    <text x="0" y="6" text-anchor="middle"
+          font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+          font-weight="700" font-size="20" fill="var(--accent)">?</text>
+  </g>
+</svg>
+{{end}}

@@ -88,6 +88,12 @@ func main() {
 	// Static
 	staticDir, _ := filepath.Abs(cfg.StaticDir)
 	r.Static("/static", staticDir)
+
+	// Serve pre-compressed (.gz) variants for text assets when the client
+	// advertises gzip support. Spring-Framework style "OnDiskCompressed".
+	if _, err := os.Stat(filepath.Join(staticDir, "css")); err == nil {
+		r.Use(gzipStatic(staticDir))
+	}
 	r.StaticFile("/favicon.ico", filepath.Join(staticDir, "favicon.ico"))
 
 	// SEO

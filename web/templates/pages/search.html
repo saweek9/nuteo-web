@@ -3,11 +3,132 @@
   <h1>{{t "search.title" $.Lang}}</h1>
   <p class="lede">{{t "search.lede" $.Lang}}</p>
 
-  <form method="GET" action="/search" class="search-form" style="margin: var(--space-6) 0;">
-    <input type="search" name="q" value="{{.Query}}" placeholder="{{t "search.placeholder" $.Lang}}" autofocus>
-    <button type="submit" class="btn btn-primary">{{if eq .Lang "th"}}ค้นหา{{else}}Search{{end}}</button>
+  <form method="GET" action="/search" class="search-page-form"
+        role="search" autocomplete="off">
+    <label for="search-page-q" class="sr-only">Search query</label>
+    <div class="search-input-wrap">
+      <span class="search-input-icon" aria-hidden="true">⌕</span>
+      <input id="search-page-q"
+             name="q"
+             type="search"
+             placeholder="{{t "search.placeholder" $.Lang}}"
+             value="{{.Query}}"
+             minlength="2"
+             hx-get="/search"
+             hx-trigger="input changed delay:300ms"
+             hx-target="#search-results-container"
+             hx-swap="innerHTML"
+             hx-push-url="true"
+             hx-indicator="#search-loading">
+      <span id="search-loading" class="search-spinner" htmx-indicator-class="htmx-indicator" aria-hidden="true"></span>
+    </div>
   </form>
 
-  {{template "search_results" .}}
+  <div id="search-results-container"
+       hx-get="/search"
+       hx-trigger="load-once"
+       hx-swap="innerHTML">
+    {{if .Results}}
+    <div id="search-results" class="search-results">
+      <p class="search-meta">
+        <span class="search-count">
+          <strong>{{.Count}}</strong>
+          {{if eq .Count 1}}result{{else}}results{{end}}
+          for <em>"{{.Query}}"</em>
+        </span>
+      </p>
+
+      {{$services := makeList}}
+      {{$projects := makeList}}
+      {{$posts := makeList}}
+      {{range .Results}}
+        {{if eq .Type "service"}}{{$services = appendTo $services .}}{{end}}
+        {{if eq .Type "project"}}{{$projects = appendTo $projects .}}{{end}}
+        {{if eq .Type "post"}}{{$posts = appendTo $posts .}}{{end}}
+      {{end}}
+
+      {{if $services}}
+      <section class="search-group" data-reveal>
+        <h3 class="search-group-title">
+          <span class="search-group-icon" aria-hidden="true">⚙</span>
+          {{t "nav.services" $.Lang}}
+          <span class="search-group-count">{{len $services}}</span>
+        </h3>
+        <ul class="search-list">
+          {{range $services}}
+          <li class="search-item">
+            <a href="{{.URL}}" class="search-link">
+              <span class="search-item-type type-badge type-service">service</span>
+              <span class="search-item-title">{{.Title}}</span>
+              <span class="search-item-url">{{.URL}}</span>
+            </a>
+          </li>
+          {{end}}
+        </ul>
+      </section>
+      {{end}}
+
+      {{if $projects}}
+      <section class="search-group" data-reveal>
+        <h3 class="search-group-title">
+          <span class="search-group-icon" aria-hidden="true">◆</span>
+          {{t "nav.portfolio" $.Lang}}
+          <span class="search-group-count">{{len $projects}}</span>
+        </h3>
+        <ul class="search-list">
+          {{range $projects}}
+          <li class="search-item">
+            <a href="{{.URL}}" class="search-link">
+              <span class="search-item-type type-badge type-project">project</span>
+              <span class="search-item-title">{{.Title}}</span>
+              <span class="search-item-url">{{.URL}}</span>
+            </a>
+          </li>
+          {{end}}
+        </ul>
+      </section>
+      {{end}}
+
+      {{if $posts}}
+      <section class="search-group" data-reveal>
+        <h3 class="search-group-title">
+          <span class="search-group-icon" aria-hidden="true">✎</span>
+          {{t "nav.blog" $.Lang}}
+          <span class="search-group-count">{{len $posts}}</span>
+        </h3>
+        <ul class="search-list">
+          {{range $posts}}
+          <li class="search-item">
+            <a href="{{.URL}}" class="search-link">
+              <span class="search-item-type type-badge type-post">post</span>
+              <span class="search-item-title">{{.Title}}</span>
+              <span class="search-item-url">{{.URL}}</span>
+            </a>
+          </li>
+          {{end}}
+        </ul>
+      </section>
+      {{end}}
+    </div>
+    {{else if .Query}}
+    <div id="search-results" class="search-empty" role="status" aria-live="polite">
+      <p class="search-empty-icon" aria-hidden="true">∅</p>
+      <p class="search-empty-text">
+        {{t "search.no_results" $.Lang}} <strong>"{{.Query}}"</strong>
+      </p>
+      <p class="search-empty-hint">
+        {{t "search.try_other" $.Lang}}
+        <a href="/services">{{t "nav.services" $.Lang}}</a>,
+        <a href="/portfolio">{{t "nav.portfolio" $.Lang}}</a>,
+        <a href="/blog">{{t "nav.blog" $.Lang}}</a>
+      </p>
+    </div>
+    {{else}}
+    <div id="search-results" class="search-prompt" role="status">
+      <p class="search-prompt-icon" aria-hidden="true">⌕</p>
+      <p class="search-prompt-text">{{t "search.prompt" $.Lang}}</p>
+    </div>
+    {{end}}
+  </div>
 </section>
 {{template "footer" .}}

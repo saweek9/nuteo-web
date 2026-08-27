@@ -1,0 +1,39 @@
+{{define "cookie_banner"}}
+{{/*
+  Cookie consent banner (GDPR / ePrivacy).
+
+  Behaviour:
+    * Renders only if user hasn't decided yet (no localStorage key).
+    * On Accept: sets "cookie-consent=accepted" + closes.
+    * On Decline: sets "cookie-consent=declined" + closes.
+    * Choice is sticky (localStorage). On decline, no analytics/3rd-party
+      scripts will be loaded by subsequent code.
+
+  CSS: .cookie-banner (below).
+*/}}
+<aside id="cookie-banner" class="cookie-banner" role="dialog"
+       aria-live="polite" aria-labelledby="cookie-title" hidden>
+  <div class="cookie-banner-content">
+    <div class="cookie-banner-text">
+      <h3 id="cookie-title" class="cookie-banner-title">
+        {{t "cookie.title" .Lang}}
+      </h3>
+      <p class="cookie-banner-body">
+        {{t "cookie.body" .Lang}}
+        <a href="/contact" class="cookie-banner-link">{{t "cookie.more" .Lang}}</a>
+      </p>
+    </div>
+    <div class="cookie-banner-actions">
+      <button type="button" class="btn btn-secondary cookie-decline"
+              data-cookie-action="decline">
+        {{t "cookie.decline" .Lang}}
+      </button>
+      <button type="button" class="btn btn-primary cookie-accept"
+              data-cookie-action="accept">
+        {{t "cookie.accept" .Lang}}
+      </button>
+    </div>
+  </div>
+</aside>
+<script src="/static/js/cookie-banner.js" defer></script>
+{{end}}

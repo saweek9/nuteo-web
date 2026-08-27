@@ -96,7 +96,10 @@ faq:
 search:
   title: Search
   lede: "Search across services, portfolio, and blog posts."
-  placeholder: kubernetes, postmortem, finops...
+  placeholder: "kubernetes, postmortem, finops..."
+  no_results: "No matches for"
+  try_other: "Try a shorter query, or browse"
+  prompt: "Type a query above to search across services, portfolio, and blog posts."
 
 cta:
   learn_more: Learn more →
@@ -120,6 +123,8 @@ errors:
   404_title: "404 — page not found"
   404_body: "The page you're looking for doesn't exist (or moved)."
   back_home: Back to home
+  did_you_mean: "Or maybe you meant:"
+  report: Report broken link
   server_error: "Something went wrong on our end. Please try again."
   validation_required: "Please fill in name, email, and message."
   validation_consent: "Please confirm you've read the privacy notice."
@@ -140,3 +145,10 @@ admin:
   signin: Sign in
   bad_credentials: Invalid credentials.
   disabled: Admin panel is not configured.
+
+cookie:
+  title: "We use cookies"
+  body: "We use essential cookies to make this site work, and analytics cookies to understand how it's used."
+  more: "Learn more"
+  accept: Accept
+  decline: Decline

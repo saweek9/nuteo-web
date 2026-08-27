@@ -6,8 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{{.PageDescription}}">
   <meta name="theme-color" content="#0f172a">
+
+  {{/* Resource hints: preload critical assets so the browser starts fetching
+      them in parallel with the HTML, async-load stylesheets so they don't
+      block first paint. */}}
+  <link rel="preload" href="/static/css/site.css" as="style">
   <link rel="icon" type="image/svg+xml" href="/favicon.ico">
-  <link rel="stylesheet" href="/static/css/site.css">
+  <link rel="stylesheet" href="/static/css/site.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="/static/css/site.css"></noscript>
+
+  {{/* Logo is the only above-the-fold image on every page. */}}
+  <link rel="preload" href="{{.LogoPath}}" as="image">
+
   <title>{{.PageTitle}} · {{.SiteName}}</title>
 </head>
 <body>
@@ -75,4 +85,5 @@
     </div>
   </header>
   <main id="main" tabindex="-1">
+  {{template "cookie_banner" .}}
 {{end}}

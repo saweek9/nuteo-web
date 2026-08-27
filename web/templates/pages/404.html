@@ -1,7 +1,30 @@
 {{template "header" .}}
-<section class="container section narrow">
-  <h1>{{t "errors.404_title" $.Lang}}</h1>
-  <p>{{t "errors.404_body" $.Lang}}</p>
-  <p><a href="/" class="btn btn-primary">{{t "errors.back_home" $.Lang}}</a></p>
+<section class="container section narrow error-page" data-reveal>
+  <div class="error-illustration">
+    {{template "404_illustration" .}}
+  </div>
+
+  <div class="error-content">
+    <h1>{{t "errors.404_title" .Lang}}</h1>
+    <p class="lede">{{t "errors.404_body" .Lang}}</p>
+
+    {{if .Suggestions}}
+    <p class="error-suggest-label">{{t "errors.did_you_mean" .Lang}}</p>
+    <ul class="error-suggestions">
+      {{range .Suggestions}}
+      <li><a href="{{.URL}}">{{.Title}}</a></li>
+      {{end}}
+    </ul>
+    {{end}}
+
+    <div class="error-actions">
+      <a href="/" class="btn btn-primary">{{t "errors.back_home" .Lang}}</a>
+      <a href="/contact" class="btn btn-secondary">{{t "errors.report" .Lang}}</a>
+    </div>
+
+    <p class="error-path" aria-label="Requested URL">
+      <code>{{.Path}}</code>
+    </p>
+  </div>
 </section>
 {{template "footer" .}}

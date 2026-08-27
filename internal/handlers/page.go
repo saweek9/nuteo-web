@@ -21,6 +21,8 @@ var partialFiles = []string{
 	"header.html",
 	"footer.html",
 	"search_results.html",
+	"404_illustration.svg.html",
+	"cookie_banner.html",
 }
 
 // pageFiles lists every page template.
@@ -100,6 +102,15 @@ func (d *Deps) loadTemplates() map[string]*template.Template {
 			return key
 		}
 		return d.I18n.T(lang, key)
+	}
+
+	// List helpers — Go templates have no built-in list type.
+	// makeList() returns an empty []any; appendTo(list, item) returns a new
+	// list with item appended. Used by the search-results partial to
+	// group results by type.
+	funcs["makeList"] = func() []any { return []any{} }
+	funcs["appendTo"] = func(list []any, item any) []any {
+		return append(list, item)
 	}
 
 	// Date formatters — wrap exported helpers so templates can call

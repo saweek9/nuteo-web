@@ -9,6 +9,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/nuteo/nuteo-web/internal/storage"
 )
 
 // Home renders the landing page.
@@ -71,12 +73,113 @@ func (d *Deps) About(c *gin.Context) {
 	renderPage(c, data)
 }
 
-// NotFound renders the 404 page.
+// suggestionEntry is a single "did you mean?" link shown on the 404 page.
+type suggestionEntry struct {
+	Title string
+	URL   string
+}
+
+// NotFound renders the 404 page. We suggest up to 3 existing pages
+// whose slug contains the largest common substring with the requested
+// path, so users who mistyped get a useful pointer.
 func (d *Deps) NotFound(c *gin.Context) {
 	c.Status(http.StatusNotFound)
+
+	requested := c.Request.URL.Path
+	suggestions := suggestPaths(requested, d.Store)
+
 	data := baseData(c, d, "Not found")
 	data["PageDescription"] = "Page not found."
+	data["Path"]            = requested
+	data["Suggestions"]    = suggestions
+	// Force the 404 template — important when invoked from a route
+	// middleware that set a different page (e.g. /services/:slug).
+	overridePage(c, "404.html")
 	renderPage(c, data)
+}
+
+// suggestPaths returns up to 3 existing content URLs whose slug or
+// path shares the longest common substring (length ≥ 3) with the
+// requested path. Cheap heuristic — perfect for a static site.
+func suggestPaths(requested string, store *storage.Store) []suggestionEntry {
+	type entry struct {
+		title string
+		url   string
+		score int
+	}
+	var matches []entry
+
+	// Trim leading/trailing slashes so segments don't include empties.
+	reqSegs := strings.FieldsFunc(strings.Trim(requested, "/-_. "), func(r rune) bool {
+		return r == '/' || r == '-' || r == '_' || r == '.' || r == ' '
+	})
+
+	add := func(title, url string, segs []string) {
+		best := 0
+		for _, a := range reqSegs {
+			if len(a) < 3 {
+				continue
+			}
+			for _, b := range segs {
+				if a == b && len(a) > best {
+					best = len(a)
+				}
+			}
+		}
+		if best >= 3 {
+			matches = append(matches, entry{title, url, best})
+		}
+	}
+
+	for _, s := range store.Services {
+		add(s.Title, "/services/"+s.Slug, strings.FieldsFunc(s.Slug, isSep))
+	}
+	for _, p := range store.Portfolio {
+		add(p.Title, "/portfolio/"+p.Slug, strings.FieldsFunc(p.Slug, isSep))
+	}
+	for _, post := range store.Posts {
+		add(post.Title, "/blog/"+post.Slug, strings.FieldsFunc(post.Slug, isSep))
+	}
+	for _, path := range []struct {
+		title, url string
+	}{
+		{"Home", "/"},
+		{"Services", "/services"},
+		{"Portfolio", "/portfolio"},
+		{"Blog", "/blog"},
+		{"FAQ", "/faq"},
+		{"Contact", "/contact"},
+	} {
+		segs := strings.FieldsFunc(strings.Trim(path.url, "/"), isSep)
+		add(path.title, path.url, segs)
+	}
+
+	// Sort by score desc, keep top 3.
+	for i := 0; i < len(matches); i++ {
+		for j := i + 1; j < len(matches); j++ {
+			if matches[j].score > matches[i].score {
+				matches[i], matches[j] = matches[j], matches[i]
+			}
+		}
+	}
+	out := make([]suggestionEntry, 0, 3)
+	for i, m := range matches {
+		if i >= 3 {
+			break
+		}
+		out = append(out, suggestionEntry{Title: m.title, URL: m.url})
+	}
+	return out
+}
+
+func isSep(r rune) bool { return r == '/' || r == '-' || r == '_' || r == '.' || r == ' ' }
+
+func commonPrefixLen(a, b string) int {
+	n := 0
+	for n < len(a) && n < len(b) && a[n] == b[n] {
+		n++
+	}
+	return n
 }
 
 // baseData fills the template vars common to every page.
