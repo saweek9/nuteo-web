@@ -271,9 +271,19 @@ func i18nLang(c *gin.Context, d *Deps) string {
 }
 
 // pickLang is the shared language picker used by handlers and middleware.
+//
+// Resolution order (highest to lowest):
+//   1. ?lang= query param   — explicit, shareable
+//   2. nuteo_lang cookie   — sticky preference set by JS / lang switcher
+//   3. Accept-Language     — browser default
 func pickLang(c *gin.Context, d *Deps) string {
 	if l := c.Query("lang"); l != "" {
 		return d.I18n.Negotiate(l, "")
+	}
+	if ck, err := c.Cookie("nuteo_lang"); err == nil && ck != "" {
+		if v := d.I18n.Negotiate(ck, ""); v != "" {
+			return v
+		}
 	}
 	return d.I18n.Negotiate("", c.GetHeader("Accept-Language"))
 }
