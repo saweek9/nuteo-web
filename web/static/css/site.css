@@ -1805,16 +1805,19 @@ html[lang="en"] body {
    ============================================ */
 .nprogress {
   position: fixed;
+  /* Sit at the very top edge but BELOW the sticky header (z-index 50).
+     Header's solid bg covers the area visually; bar animates along
+     the top of the viewport under the header's backdrop blur. */
   top: 0;
   left: 0;
   right: 0;
   height: 3px;
   background: var(--accent);
-  z-index: 200;
+  z-index: 49;  /* below header (50) so the two never visually overlap */
   transform: scaleX(0);
   transform-origin: left;
   pointer-events: none;
-  box-shadow: 0 0 8px var(--accent-soft);
+  box-shadow: 0 2px 8px var(--accent-soft);
 }
 
 .nprogress.hidden { opacity: 0; }
