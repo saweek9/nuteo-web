@@ -1799,3 +1799,22 @@ html[lang="th"] .hero h1 {
 html[lang="en"] body {
   line-height: 1.6;
 }
+
+/* ============================================
+   Top navigation progress bar (HTMX-driven)
+   ============================================ */
+.nprogress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+  z-index: 200;
+  transform: scaleX(0);
+  transform-origin: left;
+  pointer-events: none;
+  box-shadow: 0 0 8px var(--accent-soft);
+}
+
+.nprogress.hidden { opacity: 0; }

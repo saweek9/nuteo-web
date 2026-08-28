@@ -23,7 +23,8 @@
 
   <title>{{.PageTitle}} · {{.SiteName}}</title>
 </head>
-<body>
+<body hx-boost="true" hx-target="#main" hx-swap="innerHTML transition:true show:window:top settle:0ms" hx-push-url="true">
+  <div id="nprogress" class="nprogress hidden" aria-hidden="true"></div>
   <header class="site-header">
     <div class="container">
       <a class="brand" href="/">

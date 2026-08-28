@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strings"
 	"syscall"
 	"time"
 
@@ -84,6 +85,19 @@ func main() {
 	// Rate limit (60 req / minute per IP — generous for marketing sites)
 	rateLimiter := mw.NewIPRateLimiter(60, time.Minute)
 	r.Use(rateLimiter.RateLimit())
+
+	// Disable HTTP caching for HTML responses by default — our
+	// content updates should reflect immediately. Static assets keep
+	// their long max-age via staticCache().
+	r.Use(func(c *gin.Context) {
+		c.Next()
+		ct := c.Writer.Header().Get("Content-Type")
+		if ct == "" || strings.HasPrefix(ct, "text/html") {
+			if c.Writer.Header().Get("Cache-Control") == "" {
+				c.Writer.Header().Set("Cache-Control", "no-cache, must-revalidate")
+			}
+		}
+	})
 
 	// Static
 	staticDir, _ := filepath.Abs(cfg.StaticDir)
